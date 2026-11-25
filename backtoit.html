@@ -1,0 +1,1426 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Backtoit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* Backtoit brand v1 (Sept 2026): steel system, marigold on the icon tile only, Barlow Condensed + Barlow */
+:root{
+  --marigold:#F2A81D; --steel900:#1D2D3D; --steel700:#416180; --paper:#F5F5F8; --ink-brand:#1D1F20;
+  --bg:#F5F5F8; --surface:#FFFFFF; --sunk:#E9EDF2; --ink:#1D1F20; --muted:#5A6878; --line:#D8DFE7;
+  --bar:#1D2D3D; --bar-ink:#F5F5F8; --bar-muted:#A3B3C4; --bar-hover:#2A3E53; --to-block:#416180; --to-ink:#F5F5F8; --to-block-bar:#A9C1D9; --to-ink-bar:#1D2D3D;
+  --primary:#416180; --on-primary:#F5F5F8; --primary-soft:#E3EAF2; --focus:#416180; --eyebrow:#416180;
+  --stack1:#416180; --stack2:#1D2D3D;
+  --pri-high:#1D2D3D; --pri-medium:#6F8AA6; --pri-low:#CDD6E0;
+  --asap:#B3312A; --asap-soft:#FAE6E3; --days:#2F4E6C; --days-soft:#DDE7F1;
+  --good:#1F7349; --good-soft:#E0F1E7; --info:#416180; --info-soft:#E3EAF2;
+  --shadow:0 1px 2px rgba(29,45,61,.06),0 6px 18px rgba(29,45,61,.06);
+  --shadow-lg:0 2px 4px rgba(29,45,61,.06),0 14px 34px rgba(29,45,61,.10);
+  --display:"Barlow Condensed","Arial Narrow",ui-sans-serif,system-ui,sans-serif;
+  --sans:"Barlow",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#131E29; --surface:#1D2D3D; --sunk:#16232F; --ink:#F5F5F8; --muted:#A3B3C4; --line:#2D4155;
+    --bar:#0F1821; --bar-ink:#F5F5F8; --bar-muted:#8FA1B4; --bar-hover:#1D2D3D; --to-block:#A9C1D9; --to-ink:#1D2D3D;
+    --primary:#416180; --on-primary:#F5F5F8; --primary-soft:#243A50; --focus:#A9C1D9; --eyebrow:#A9C1D9;
+    --stack1:#416180; --stack2:#0B121A;
+    --pri-high:#E6ECF2; --pri-medium:#7F9BB8; --pri-low:#33485E;
+    --asap:#FF8F84; --asap-soft:#3B2023; --days:#B9CCE0; --days-soft:#27394C;
+    --good:#72D1A0; --good-soft:#173226; --info:#B9CCE0; --info-soft:#27394C;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25);
+    --shadow-lg:0 2px 4px rgba(0,0,0,.3),0 14px 34px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#131E29; --surface:#1D2D3D; --sunk:#16232F; --ink:#F5F5F8; --muted:#A3B3C4; --line:#2D4155;
+  --bar:#0F1821; --bar-ink:#F5F5F8; --bar-muted:#8FA1B4; --bar-hover:#1D2D3D; --to-block:#A9C1D9; --to-ink:#1D2D3D;
+  --primary:#416180; --on-primary:#F5F5F8; --primary-soft:#243A50; --focus:#A9C1D9; --eyebrow:#A9C1D9;
+  --stack1:#416180; --stack2:#0B121A;
+  --pri-high:#E6ECF2; --pri-medium:#7F9BB8; --pri-low:#33485E;
+  --asap:#FF8F84; --asap-soft:#3B2023; --days:#B9CCE0; --days-soft:#27394C;
+  --good:#72D1A0; --good-soft:#173226; --info:#B9CCE0; --info-soft:#27394C;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25);
+  --shadow-lg:0 2px 4px rgba(0,0,0,.3),0 14px 34px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:400 15.5px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding-inline:16px}
+main.wrap{padding-block:8px 72px}
+h1,h2,h3{font-family:var(--display);font-weight:600;letter-spacing:-.015em;text-wrap:balance;margin:0;line-height:1.1}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.muted{color:var(--muted)}
+.eyebrow{font:600 12px/1.2 var(--display);letter-spacing:.07em;text-transform:uppercase;color:var(--eyebrow)}
+
+/* ---------- wordmark + icon ---------- */
+.wordmark{font:600 27px/1 var(--display);letter-spacing:-.015em;color:var(--bar-ink);display:inline-flex;align-items:baseline;white-space:nowrap}
+.wordmark .to{background:var(--to-block-bar);color:var(--to-ink-bar);padding:.04em .08em .06em;margin:0 .02em}
+.icon{flex:none;display:block}
+
+/* ---------- brand bar ---------- */
+.bar{background:var(--bar);color:var(--bar-ink);padding-top:env(safe-area-inset-top,0px)}
+.bar-in{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;padding-block:14px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;border-radius:6px}
+.brand:hover .wordmark{opacity:.9}
+.brand .tag{font:500 13px/1 var(--sans);color:var(--bar-muted);margin-left:14px;padding-left:14px;border-left:1px solid var(--bar-hover)}
+@media (max-width:620px){.brand .tag{display:none}}
+nav.tabs{display:flex;gap:2px;flex-wrap:wrap}
+nav.tabs button{border:0;background:none;color:var(--bar-muted);padding:7px 12px;border-radius:6px;font:600 16px/1.2 var(--display);letter-spacing:.02em;position:relative}
+nav.tabs button:hover{color:var(--bar-ink);background:var(--bar-hover)}
+nav.tabs button[aria-current="page"]{color:var(--bar-ink)}
+nav.tabs button[aria-current="page"]::after{content:"";position:absolute;left:12px;right:12px;bottom:0;height:3px;background:var(--to-block-bar)}
+nav.tabs .n{display:inline-block;min-width:18px;padding:1px 5px;margin-left:6px;background:var(--bar-hover);font:600 12px/16px var(--sans);color:var(--bar-ink);text-align:center;border-radius:3px}
+.team{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--bar-muted)}
+.team .dots{display:flex}
+.team .dots span{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font:600 11px var(--sans);color:#fff;border:2px solid var(--bar);margin-left:-6px}
+.team .dots span:first-child{margin-left:0}
+
+.banner{margin-top:18px;padding:12px 16px;border-radius:8px;background:var(--primary-soft);display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:14.5px}
+.banner .sp{flex:1 1 260px}
+
+/* ---------- time picker ---------- */
+.picker{margin-top:28px}
+.picker-h{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;margin-bottom:12px}
+.picker-h h2{font-size:32px}
+.modes{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.mode{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:11px 13px;text-align:left;display:flex;flex-direction:column;gap:2px;transition:border-color .15s,background .15s}
+.mode:hover{border-color:var(--primary)}
+.mode b{font:600 19px/1.15 var(--display);letter-spacing:-.005em}
+.mode span{font-size:13px;color:var(--muted)}
+.mode[aria-pressed="true"]{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.mode[aria-pressed="true"] span{color:inherit;opacity:.85}
+@media (max-width:760px){.modes{grid-template-columns:repeat(2,minmax(0,1fr))}.modes .mode:last-child{grid-column:1/-1}}
+
+.stats{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:14px;font-size:14px;color:var(--muted)}
+.stats b{color:var(--ink);font-variant-numeric:tabular-nums;font-weight:600}
+
+/* ---------- top pick: the top card of the stack ---------- */
+.pick{margin:22px 0 12px 12px;background:var(--surface);border:1px solid var(--line);border-radius:6px;box-shadow:-6px 6px 0 var(--stack1),-12px 12px 0 var(--stack2);display:grid;grid-template-columns:1fr auto;gap:0}
+.pick .body{padding:20px 22px;min-width:0}
+.pick .eyebrow{display:flex;align-items:center;gap:8px}
+.pick .step{font:600 clamp(26px,3.6vw,36px)/1.08 var(--display);letter-spacing:-.015em;margin-top:8px}
+.pick .meta{margin-top:8px;font-size:14px}
+.pick .chips{justify-content:flex-start;margin-top:14px}
+.pick .actions{display:flex;flex-direction:column;gap:8px;justify-content:center;padding:20px 22px 20px 0}
+@media (max-width:620px){.pick{grid-template-columns:1fr}.pick .actions{flex-direction:row;flex-wrap:wrap;justify-content:flex-start;padding:0 22px 20px}}
+
+/* ---------- rows ---------- */
+.section-h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:32px;margin-bottom:10px}
+.section-h h2{font-size:24px}
+.intro{margin:0 0 14px;max-width:65ch;font-size:14.5px;color:var(--muted)}
+ul.rows{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.row{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:6px 14px;align-items:center;padding:12px 14px 12px 12px;border-left:4px solid var(--pri,var(--pri-low));border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row:hover{background:color-mix(in srgb,var(--sunk) 55%,transparent)}
+.pri-high{--pri:var(--pri-high)}.pri-medium{--pri:var(--pri-medium)}.pri-low{--pri:var(--pri-low)}
+.row .step{font-weight:500;font-size:16px}
+.meta{font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.meta .who{color:var(--info);font-weight:600}
+.chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:flex-end}
+.acts{display:flex;gap:2px}
+@media (max-width:620px){
+  .row{grid-template-columns:auto minmax(0,1fr) auto}
+  .row .chips{grid-column:2/4;justify-content:flex-start}
+  .row .acts{grid-column:3;grid-row:1}
+}
+.check{width:26px;height:26px;border-radius:4px;border:2px solid var(--line);background:none;display:grid;place-items:center;color:transparent;padding:0;transition:border-color .15s,color .15s,background .15s}
+.check:hover{border-color:var(--good);color:var(--good);background:var(--good-soft)}
+.check svg{width:14px;height:14px}
+.chip{font:600 12px/1 var(--display);letter-spacing:.05em;text-transform:uppercase;padding:5px 8px;border-radius:3px;background:var(--sunk);color:var(--muted);white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.chip.asap,.chip.overdue{background:var(--asap-soft);color:var(--asap)}
+.chip.days{background:var(--days-soft);color:var(--days)}
+.chip.follow,.chip.court{background:var(--info-soft);color:var(--info)}
+.chip.easy{background:var(--good-soft);color:var(--good)}
+.chip.pri{background:none;border:1px solid var(--line);color:var(--ink)}
+.meter{display:inline-flex;gap:2px;align-items:flex-end}
+.meter i{display:block;width:3px;background:currentColor;opacity:.25}
+.meter i:nth-child(1){height:5px}.meter i:nth-child(2){height:8px}.meter i:nth-child(3){height:11px}
+.meter i.on{opacity:1}
+
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:7px 14px;font:600 14px/1.2 var(--sans);white-space:nowrap;transition:border-color .15s,background .15s}
+.btn:hover{border-color:var(--primary)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.primary,.btn.brand{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.btn.primary:hover,.btn.brand:hover{filter:brightness(1.08)}
+.btn.ghost{border-color:transparent;background:none;color:var(--muted);padding:6px 9px}
+.btn.ghost:hover{color:var(--ink);background:var(--sunk)}
+.btn.danger{color:var(--asap)}
+.btn.armed,.btn.armed:hover{background:var(--asap);border-color:var(--asap);color:#fff}
+.btn.small{padding:5px 11px;font-size:13px}
+.empty{padding:26px;text-align:center;color:var(--muted);background:var(--surface);border-radius:8px;border:1px dashed var(--line)}
+.footnote{font-size:13px;color:var(--muted);margin-top:14px;max-width:70ch}
+
+/* ---------- projects ---------- */
+.cat{margin-top:32px}
+.cat > h2{font-size:26px;display:flex;align-items:baseline;gap:10px}
+.sub{margin-top:14px}
+.sub > .eyebrow{margin-bottom:8px;display:block}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.pcard{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px;border-top:4px solid var(--pri,var(--pri-low));display:flex;flex-direction:column;gap:10px}
+.pcard h3{font-size:20px}
+.pcard .head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.psteps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.psteps button{width:100%;text-align:left;border:0;background:var(--sunk);border-radius:4px;padding:7px 9px;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px}
+.psteps button:hover{outline:1px solid var(--primary)}
+.psteps button.wait{color:var(--muted)}
+.pcard .foot{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;align-items:center}
+.hint{font-size:13.5px;color:var(--asap)}
+
+/* ---------- done ---------- */
+.week{margin-top:22px}
+.week h3{font-size:19px;margin-bottom:8px;display:flex;gap:10px;align-items:baseline}
+.tally{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.tally .chip{font-size:13px;padding:7px 10px;background:var(--surface);border:1px solid var(--line);color:var(--ink)}
+
+/* ---------- setup + welcome ---------- */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:20px;margin-top:16px;display:flex;flex-direction:column;gap:12px}
+.panel h2{font-size:23px}
+.panel p{margin:0;max-width:65ch}
+.catedit{display:grid;grid-template-columns:minmax(120px,1fr) minmax(0,2fr) auto;gap:8px;align-items:center}
+@media (max-width:620px){.catedit{grid-template-columns:1fr auto}.catedit .subs{grid-column:1/-1;grid-row:2}}
+input[type=text],input[type=email],input[type=date],select,textarea{border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:8px 10px;width:100%;min-width:0}
+textarea{min-height:64px;resize:vertical}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.drop{flex:1 1 320px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:22px;border:2px dashed var(--line);border-radius:8px;background:var(--bg);text-align:center;cursor:pointer;transition:border-color .15s,background .15s}
+.drop b{font:600 20px/1.1 var(--display);color:var(--primary)}
+.drop span{font-size:13.5px;color:var(--muted)}
+.drop:hover,.drop.over{border-color:var(--primary);background:var(--primary-soft)}
+/* ---------- brain dump + triage ---------- */
+.dump{margin-top:28px;max-width:820px}
+.dump-h{font-size:clamp(32px,5vw,46px);margin-top:6px}
+.dump textarea#bd-text{min-height:230px;font:400 16px/1.55 var(--sans);padding:14px;background:var(--surface)}
+.attach{display:flex;flex-wrap:wrap;gap:8px}
+.attach figure{margin:0;position:relative;width:76px;height:76px;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.attach img{width:100%;height:100%;object-fit:cover;display:block}
+.attach figure button,.attach .chip button{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;border:0;background:var(--steel900);color:var(--paper);font-size:14px;line-height:1;padding:0}
+.attach .chip{position:relative;padding-right:30px;text-transform:none;letter-spacing:0;font:500 13px var(--sans)}
+.attach .chip button{top:50%;transform:translateY(-50%)}
+.btn.big{padding:11px 22px;font-size:16px}
+.thinking{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:8px;background:var(--primary-soft);font-weight:500}
+.thinking::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid var(--primary);border-right-color:transparent;animation:spin .8s linear infinite;flex:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.tri-top{display:flex;flex-direction:column;gap:8px}
+.bar-prog{height:6px;background:var(--sunk);border-radius:3px;overflow:hidden}
+.bar-prog i{display:block;height:100%;background:var(--primary)}
+.tcard{margin:18px 0 12px 12px;background:var(--surface);border:1px solid var(--line);border-radius:6px;box-shadow:-6px 6px 0 var(--stack1),-12px 12px 0 var(--stack2);padding:20px 22px;display:flex;flex-direction:column;gap:14px}
+.tri-title{font:600 clamp(24px,3.4vw,32px)/1.1 var(--display)!important;letter-spacing:-.01em;border:1px solid transparent!important;background:none!important;padding:4px 6px!important;margin-left:-7px}
+.tri-title:hover,.tri-title:focus{border-color:var(--line)!important;background:var(--bg)!important}
+.why{margin:-6px 0 0;font-size:14px;color:var(--muted)}
+.tri-grid{display:grid;grid-template-columns:auto 1fr;gap:10px 16px;align-items:center}
+@media (max-width:560px){.tri-grid{grid-template-columns:1fr;gap:4px}.tri-grid .opts{margin-bottom:8px}}
+.tri-grid .flabel{font-size:14px;font-weight:600}
+.tri-grid small{font-weight:400;color:var(--muted)}
+.opts{display:flex;flex-wrap:wrap;gap:4px}
+.opt{border:1px solid var(--line);background:var(--surface);border-radius:5px;padding:6px 11px;font:500 14px var(--sans);color:var(--muted)}
+.opt:hover{border-color:var(--primary);color:var(--ink)}
+.opt[aria-pressed="true"]{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.tri-acts{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+/* ---------- hand off ---------- */
+.choice{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:8px;padding:12px 14px;cursor:pointer;background:var(--surface)}
+.choice:has(input:checked){border-color:var(--primary);background:var(--primary-soft)}
+.choice input{margin-top:4px;accent-color:var(--primary);flex:none}
+.choice b{display:block;font-weight:600;font-size:15.5px}
+.choice[aria-disabled="true"]{opacity:.55;cursor:not-allowed}
+.choice-body{margin:-4px 0 0 30px;display:flex;flex-direction:column;gap:10px}
+.check-row{display:flex;gap:9px;align-items:center;font-weight:600;font-size:15px;cursor:pointer}
+.check-row input{width:17px;height:17px;accent-color:var(--primary)}
+.mailbox{display:flex;flex-direction:column;gap:10px;padding:12px;border:1px dashed var(--line);border-radius:8px}
+a.btn{text-decoration:none;display:inline-flex;align-items:center;cursor:pointer}
+.cal{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.cal a.btn{text-decoration:none;color:var(--ink)}
+.result{font-size:14px;background:var(--sunk);border-radius:6px;padding:10px 12px;white-space:pre-wrap}
+.welcome{margin-top:44px;max-width:780px}
+.welcome h2{font-size:clamp(36px,5.5vw,52px)}
+.welcome p{color:var(--muted);max-width:60ch;margin:10px 0 0;font-size:16px}
+.roles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:24px}
+@media (max-width:560px){.roles{grid-template-columns:1fr}}
+.role{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:6px;transition:border-color .15s,box-shadow .15s}
+.role:hover{border-color:var(--primary);box-shadow:-4px 4px 0 var(--stack1)}
+.role b{font:600 23px/1.1 var(--display)}
+.role span{font-size:14px;color:var(--muted)}
+
+/* ---------- dialogs ---------- */
+dialog{border:0;border-radius:10px;padding:0;background:var(--surface);color:var(--ink);width:min(560px,calc(100vw - 32px));box-shadow:0 24px 70px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(15,24,33,.55)}
+dialog form{padding:22px;display:flex;flex-direction:column;gap:14px;max-height:calc(100vh - 40px);overflow:auto}
+dialog h2{font-size:26px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field > label,.field > .flabel{font-size:14px;font-weight:600}
+.help{font-size:13px;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:480px){.two{grid-template-columns:1fr}}
+.seg{display:flex;flex-wrap:wrap;gap:3px;background:var(--sunk);padding:3px;border-radius:7px}
+.seg label{position:relative;flex:1 1 auto}
+.seg input{position:absolute;opacity:0;inset:0;margin:0}
+.seg span{display:block;text-align:center;padding:7px 10px;border-radius:5px;font-size:14px;color:var(--muted);font-weight:500}
+.seg input:checked + span{background:var(--primary);color:var(--on-primary)}
+.seg input:focus-visible + span{outline:2px solid var(--focus)}
+.newproj{border:1px dashed var(--line);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.dlg-foot{display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap;padding-top:4px}
+.dlg-foot .r{display:flex;gap:8px}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--steel900);color:var(--paper);padding:11px 16px;border-radius:6px;display:flex;gap:14px;align-items:center;font-size:14.5px;box-shadow:var(--shadow-lg);max-width:calc(100vw - 32px);z-index:10}
+.toast button{background:none;border:0;color:inherit;font-weight:700;text-decoration:underline;padding:0}
+@media (prefers-reduced-motion:no-preference){.pick{animation:settle .25s ease-out}@keyframes settle{from{transform:translate(-3px,3px)}to{transform:none}}}
+</style>
+
+<header class="bar">
+  <div class="wrap bar-in">
+    <a class="brand" href="#now" data-act="home" title="Backtoit home" aria-label="Backtoit home">
+      <svg class="icon" width="34" height="34" viewBox="0 0 60 60" aria-hidden="true"><rect width="60" height="60" rx="10.5" fill="#F2A81D"/><rect x="14" y="26" width="20" height="20" fill="#1D2D3D"/><rect x="20" y="20" width="20" height="20" fill="#416180"/><rect x="26" y="14" width="20" height="20" fill="#F5F5F8"/></svg>
+      <h1 class="wordmark" aria-label="Backtoit">Back<span class="to">to</span>it</h1>
+      <span class="tag">Meeting's over. Back to it.</span>
+    </a>
+    <div id="team" class="team" hidden></div>
+    <nav class="tabs" aria-label="Views">
+      <button data-view="now">Now</button>
+      <button data-view="dump">Brain dump</button>
+      <button data-view="projects">Projects</button>
+      <button data-view="waiting">Waiting<span class="n" id="n-wait" hidden></span></button>
+      <button data-view="done">Done</button>
+      <button data-view="setup">Setup</button>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+  <div id="banner"></div>
+  <div id="view"></div>
+</main>
+
+<dialog id="stepDlg">
+  <form id="stepForm">
+    <h2 id="stepDlgTitle">Next step</h2>
+    <div class="field">
+      <label for="f-project">Project</label>
+      <select id="f-project"></select>
+    </div>
+    <div class="newproj" id="f-newproj" hidden>
+      <div class="field"><label for="f-np-title">New project name</label><input type="text" id="f-np-title" placeholder="e.g. Marsh accretion paper"></div>
+      <div class="two">
+        <div class="field"><label for="f-np-cat">Category</label><select id="f-np-cat"></select></div>
+        <div class="field"><label for="f-np-sub">Subcategory</label><select id="f-np-sub"></select></div>
+      </div>
+      <div class="field"><span class="flabel">Priority</span><div class="seg" id="f-np-pri"></div>
+        <span class="help">High = moves your career forward (promotion, funding, standing in your field) and you want to do it.</span></div>
+    </div>
+    <div class="field">
+      <label for="f-title">What's the next step?</label>
+      <input type="text" id="f-title" required placeholder="e.g. Email program officer about the one-page summary">
+    </div>
+    <div class="field">
+      <span class="flabel">Whose court is it in?</span>
+      <div class="seg" id="f-ball"></div>
+    </div>
+    <div class="field" id="f-tofield" hidden>
+      <label for="f-to">Who has it?</label>
+      <select id="f-to"></select>
+      <span class="help" id="f-tohelp"></span>
+    </div>
+    <div class="two" id="f-waitfields" hidden>
+      <div class="field"><label for="f-waiting">Waiting on</label><input type="text" id="f-waiting" placeholder="Person or thing"></div>
+      <div class="field"><label for="f-follow">Follow up on</label><input type="date" id="f-follow"><span class="help">It comes back to Now on this date.</span></div>
+    </div>
+    <div class="cal" id="f-cal" hidden></div>
+    <div class="field"><span class="flabel">Urgency</span><div class="seg" id="f-urg"></div></div>
+    <div class="field"><label for="f-due">Due date (optional)</label><input type="date" id="f-due"><span class="help">If set, urgency goes up on its own as the date gets closer.</span></div>
+    <div class="field"><span class="flabel">Ease</span><div class="seg" id="f-ease"></div>
+      <span class="help">Easy: under 15 minutes, little brain power. Hard: needs a focused block.</span></div>
+    <div class="field"><label for="f-notes">Notes</label><textarea id="f-notes"></textarea></div>
+    <div class="dlg-foot">
+      <button type="button" class="btn ghost danger" id="f-delete">Delete step</button>
+      <div class="r"><button type="button" class="btn" id="f-cancel">Cancel</button><button type="submit" class="btn primary">Save</button></div>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="hoDlg">
+  <form id="hoForm">
+    <h2>Hand off this step</h2>
+    <p class="meta" id="ho-step" style="margin:-6px 0 0;font-size:14.5px"></p>
+    <label class="choice" id="ho-c1"><input type="radio" name="ho-to" value="mate"><span><b>To a colleague on Backtoit</b><span class="help">It moves to their Now list. You’ll see it on your Waiting shelf until they’re done.</span></span></label>
+    <div class="choice-body" id="ho-matebox"><select id="ho-mate" aria-label="Which colleague"></select></div>
+    <p class="help" id="ho-nomates" style="margin:-4px 0 0 30px" hidden></p>
+    <label class="choice"><input type="radio" name="ho-to" value="other"><span><b>To someone else, and I’ll wait on them</b><span class="help">It goes on your Waiting shelf and comes back to Now on the follow-up date.</span></span></label>
+    <div class="choice-body" id="ho-otherbox">
+      <div class="two">
+        <div class="field"><label for="ho-who">Who are you waiting on?</label><input type="text" id="ho-who" placeholder="e.g. Jamie, the grants office"></div>
+        <div class="field"><label for="ho-date">Follow up on</label><input type="date" id="ho-date"></div>
+      </div>
+      <div class="cal" id="ho-cal"></div>
+      <label class="check-row"><input type="checkbox" id="ho-sendmail"> Also write them an email</label>
+      <div class="mailbox" id="ho-mailbox" hidden>
+        <div class="field"><label for="ho-email">Their email address <span class="help">(optional)</span></label><input type="email" id="ho-email" placeholder="e.g. jamie@university.edu"></div>
+        <div class="field"><span class="flabel">Your email</span><div class="seg" id="ho-app"></div></div>
+        <p class="help" id="ho-mailhelp" style="margin:0"></p>
+      </div>
+    </div>
+    <div class="dlg-foot"><span></span><div class="r"><button type="button" class="btn" id="ho-cancel">Cancel</button><button type="submit" class="btn primary" id="ho-go">Hand off</button><a class="btn primary" id="ho-go-mail" rel="noopener" hidden>Hand off and write email</a></div></div>
+  </form>
+</dialog>
+
+<dialog id="nuDlg">
+  <form id="nuForm">
+    <h2 id="nu-h">Nudge</h2>
+    <p class="meta" id="nu-step" style="margin:-6px 0 0;font-size:14.5px"></p>
+    <div class="field"><label for="nu-email">Their email <span class="help">(optional)</span></label><input type="email" id="nu-email" placeholder="Or add it in your email app"></div>
+    <div class="field"><label for="nu-body">Message</label><textarea id="nu-body" rows="7"></textarea><span class="help">Edit it here or in your email app before sending.</span></div>
+    <div class="field"><span class="flabel">Your email</span><div class="seg" id="nu-app"></div></div>
+    <p class="help" id="nu-help" style="margin:0"></p>
+    <div class="dlg-foot"><button type="button" class="btn ghost" id="nu-later">Just remind me in a week</button><div class="r"><button type="button" class="btn" id="nu-cancel">Close</button><a class="btn primary" id="nu-go" rel="noopener">Write the email</a></div></div>
+  </form>
+</dialog>
+
+<dialog id="projDlg">
+  <form id="projForm">
+    <h2 id="projDlgTitle">Project</h2>
+    <div class="field"><label for="p-title">Project name</label><input type="text" id="p-title" required></div>
+    <div class="two">
+      <div class="field"><label for="p-cat">Category</label><select id="p-cat"></select></div>
+      <div class="field"><label for="p-sub">Subcategory</label><select id="p-sub"></select></div>
+    </div>
+    <div class="field"><span class="flabel" id="p-prilabel">Priority</span><div class="seg" id="p-pri"></div>
+      <span class="help">High = moves your career forward (promotion, funding, standing in your field) and you want to do it. Low = you don't need to do it, or don't want to.</span></div>
+    <div class="field"><label for="p-notes">Notes</label><textarea id="p-notes" placeholder="Stage, funding, collaborators, target journal…"></textarea></div>
+    <div class="dlg-foot">
+      <div class="r"><button type="button" class="btn ghost danger" id="p-delete">Delete</button><button type="button" class="btn ghost" id="p-archive">Archive</button></div>
+      <div class="r"><button type="button" class="btn" id="p-cancel">Cancel</button><button type="submit" class="btn primary">Save</button></div>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+(() => {
+const KEY = 'facultyTriage.v1';
+const PRI = ['high','medium','low'];
+const URG = ['asap','days','weeks','months','none'];
+const EASE = ['easy','medium','hard'];
+const URG_LABEL = {asap:'ASAP', days:'Days', weeks:'Weeks', months:'Months', none:'No rush'};
+const EASE_LABEL = {easy:'Easy', medium:'Medium', hard:'Hard'};
+const PRI_LABEL = {high:'High', medium:'Medium', low:'Low'};
+const MODES = [
+  {id:'15', t:'Between meetings', d:'15 min · easy steps'},
+  {id:'60', t:'Open hour', d:'Easy and medium'},
+  {id:'deep', t:'Protected block', d:'2 hrs+ · hard first'},
+  {id:'empty', t:'Running on empty', d:'Easy · due soonest'},
+  {id:'all', t:'Everything', d:'Full ranked list'},
+];
+const ROLES = {
+  faculty: {label:'Faculty', d:'Research, teaching, service and mentoring', cats:[
+    ['Research', ['Papers','Grants & proposals','Projects']], ['Teaching', ['Courses','Course development']],
+    ['Service', ['Department & university','Discipline & reviewing']], ['Mentoring', ['Graduate students','Undergraduates','Postdocs']]]},
+  grad: {label:'Graduate student', d:'Thesis, coursework, teaching and your next step', cats:[
+    ['Thesis', ['Chapters','Data & analysis','Committee']], ['Coursework', []], ['Teaching', []],
+    ['Professional development', ['Conferences','Fellowships & funding','Networking']], ['Collaborations', []]]},
+  postdoc: {label:'Postdoc', d:'Papers, funding, the job search and mentoring', cats:[
+    ['Research', ['Papers','Projects','Collaborations']], ['Funding', ['Fellowships','Grants']],
+    ['Job search', ['Applications','Interviews & job talks']], ['Mentoring', ['Students']], ['Service & outreach', []]]},
+  staff: {label:'Research staff', d:'Projects, data, reporting and admin', cats:[
+    ['Projects', []], ['Data & analysis', []], ['Reporting & admin', []], ['Collaborations', []], ['Professional development', []]]},
+};
+
+const uid = () => Math.random().toString(36).slice(2, 10);
+const clean = o => JSON.parse(JSON.stringify(o));
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const isoDay = d => { d = new Date(d); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
+const todayISO = () => isoDay(new Date());
+const addDays = n => { const d = new Date(); d.setDate(d.getDate() + n); return isoDay(d); };
+const daysUntil = iso => { if (!iso) return null; const t = new Date(); t.setHours(0,0,0,0); const x = new Date(iso + 'T00:00'); return Math.round((x - t) / 864e5); };
+const fmtDate = iso => iso ? new Date(iso.slice(0,10) + 'T00:00').toLocaleDateString(undefined, {month:'short', day:'numeric'}) : '';
+const catsFor = role => ROLES[role].cats.map(([name, subs]) => ({id:uid(), name, subs:[...subs]}));
+
+/* ---------- state ---------- */
+function blankState(role = 'faculty') {
+  return {version:1, isExample:false, ui:{view:'now', mode:'15'}, categories:catsFor(role), projects:[], items:[]};
+}
+function exampleState() {
+  const s = blankState(); s.isExample = true;
+  const cat = n => s.categories.find(c => c.name === n).id;
+  const P = (title, c, sub, priority, notes = '') => { const p = {id:uid(), title, categoryId:cat(c), sub, priority, notes, archived:false}; s.projects.push(p); return p.id; };
+  const I = (projectId, title, o = {}) => s.items.push(Object.assign({id:uid(), projectId, title, ball:true, waitingOn:'', followUp:'', urgency:'weeks', due:'', ease:'medium', notes:'', done:false, doneAt:'', created:new Date().toISOString()}, o));
+  let p = P('Marsh accretion paper', 'Research', 'Papers', 'high', 'Minor revisions at Estuaries and Coasts');
+  I(p, 'Answer Reviewer 2 comments 4–9', {urgency:'days', ease:'hard', due:addDays(9)});
+  I(p, 'Update Fig. 3 color scale', {urgency:'days', ease:'easy'});
+  I(p, 'Send cover letter draft to coauthors', {done:true, doneAt:new Date(Date.now() - 5*864e5).toISOString(), ease:'easy'});
+  p = P('NSF CAREER proposal', 'Research', 'Grants & proposals', 'high');
+  I(p, 'Email program officer about the one-page summary', {urgency:'asap', ease:'easy'});
+  I(p, 'Draft Broader Impacts section', {urgency:'weeks', ease:'hard', due:addDays(24)});
+  p = P('Seagrass synthesis review', 'Research', 'Papers', 'medium');
+  I(p, 'Outline section 2 (drivers of loss)', {urgency:'weeks', ease:'medium'});
+  p = P('Coastal sensor array', 'Research', 'Projects', 'medium');
+  I(p, 'Sensors back from calibration', {ball:false, waitingOn:'Vendor', followUp:addDays(4), ease:'easy'});
+  p = P('Intro to Oceanography', 'Teaching', 'Courses', 'high');
+  I(p, 'Post Week 6 slides to Brightspace', {urgency:'asap', ease:'easy'});
+  I(p, 'Write midterm exam', {urgency:'days', ease:'hard', due:addDays(6)});
+  p = P('Manuscript review for Estuaries and Coasts', 'Service', 'Discipline & reviewing', 'low');
+  I(p, 'Review ECO-2026-114', {urgency:'weeks', ease:'medium', due:addDays(12)});
+  p = P('Graduate admissions committee', 'Service', 'Department & university', 'low');
+  I(p, 'Score six applications', {urgency:'weeks', ease:'medium'});
+  I(p, 'Reply to chair with meeting availability', {urgency:'days', ease:'easy'});
+  p = P('Thesis chapter 2 (MS student)', 'Mentoring', 'Graduate students', 'medium');
+  I(p, 'Revised draft of chapter 2', {ball:false, waitingOn:'Student', followUp:addDays(-1), ease:'easy'});
+  I(p, 'Read and comment on methods section', {urgency:'weeks', ease:'hard'});
+  I(p, 'Sign committee form', {done:true, doneAt:new Date(Date.now() - 2*864e5).toISOString(), ease:'easy'});
+  return s;
+}
+function loadLocal() { try { const r = localStorage.getItem(KEY); return r ? JSON.parse(r) : null; } catch (e) { return null; } }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(local)); } catch (e) {} }
+let local = loadLocal() || exampleState();
+local.ui = local.ui || {view:'now', mode:'15'};
+let S = local;             // the list on screen: local data, or the shared list once connected
+let shared = null;         // {db, user, me, names, members, loaded, hasCats}
+let downloads = null;
+let sampleFn = null, imgCaps = null;
+let myName = '';   // first name for signing drafted emails (shared version only)   // Claude, when the page runs inside claude.ai
+const freshDump = () => ({text:'', files:[], images:[], urls:[], busy:false, status:'', err:'', cards:null, i:0, ctl:null});
+let dump = freshDump();
+
+const proj = id => S.projects.find(p => p.id === id);
+const catOf = id => S.categories.find(c => c.id === id);
+const me = () => shared ? shared.me : null;
+const ownerOf = it => it.owner || it.createdBy || me();
+const mine = it => !shared || ownerOf(it) === shared.me;
+const prioOf = p => (shared && p?.prio?.[shared.me]) || p?.priority || 'medium';
+const nameOf = id => !shared || !id ? '' : id === shared.me ? 'You' : (shared.names[id] || 'Teammate');
+
+/* ---------- saving ---------- */
+const queues = {};
+function dbWrite(path, op) { queues[path] = (queues[path] || Promise.resolve()).then(op).catch(dbErr); }
+function dbErr(e) {
+  const c = e && e.code;
+  toast(c === 'quota_exceeded' ? 'The shared list is full. Delete some finished projects, then try again.'
+    : c === 'invalid_argument' ? 'You can view this list but not change it. Ask the owner for Contributor access.'
+    : 'That change didn’t save. Check your connection and try again.');
+}
+const strip = o => { const {id, ...rest} = o; return clean(rest); };
+function putItem(it) { if (shared) dbWrite('items/' + it.id, () => shared.db.doc('items/' + it.id).set(strip(it))); }
+function putProj(p) { if (shared) dbWrite('projects/' + p.id, () => shared.db.doc('projects/' + p.id).set(strip(p))); }
+function dropItem(id) { S.items = S.items.filter(i => i.id !== id); if (shared) dbWrite('items/' + id, () => shared.db.doc('items/' + id).delete()); }
+function dropProj(id) { S.projects = S.projects.filter(p => p.id !== id); if (shared) dbWrite('projects/' + id, () => shared.db.doc('projects/' + id).delete()); }
+function putCats() { if (shared) dbWrite('settings/categories', () => shared.db.doc('settings/categories').set({list:clean(S.categories)})); }
+
+/* ---------- ranking ---------- */
+function effUrg(it) {
+  let u = URG.indexOf(it.urgency || 'none'); if (u < 0) u = 4;
+  const n = daysUntil(it.due);
+  if (n != null) u = Math.min(u, n <= 2 ? 0 : n <= 14 ? 1 : n <= 60 ? 2 : 3);
+  return u;
+}
+const followDue = it => !it.ball && it.followUp && daysUntil(it.followUp) <= 0;
+const live = it => !it.done && !(proj(it.projectId)?.archived);
+const effEase = it => followDue(it) ? 'easy' : it.ease;
+const handedAway = it => shared && live(it) && it.handedBy === shared.me && ownerOf(it) !== shared.me;
+const onShelf = it => live(it) && ((mine(it) && !it.ball) || handedAway(it));
+function rankList(mode) {
+  let L = S.items.filter(i => live(i) && mine(i) && (i.ball || followDue(i)));
+  L = L.filter(i => { const e = effEase(i);
+    return mode === '15' || mode === 'empty' ? e === 'easy' : mode === '60' ? e !== 'hard' : mode === 'deep' ? e !== 'easy' : true; });
+  const key = i => {
+    let e = EASE.indexOf(effEase(i)); if (mode === 'deep') e = 2 - e;
+    const u = followDue(i) ? Math.min(1, effUrg(i)) : effUrg(i);
+    const pr = PRI.indexOf(prioOf(proj(i.projectId)));
+    const due = daysUntil(i.due) ?? 9999;
+    return mode === 'empty' ? [u, due, pr, e] : [pr, u, e, due];
+  };
+  return L.map(i => [key(i), i]).sort((a, b) => { for (let k = 0; k < 4; k++) if (a[0][k] !== b[0][k]) return a[0][k] - b[0][k]; return 0; }).map(x => x[1]);
+}
+
+/* ---------- small renderers ---------- */
+const CHECK = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3L13 4.5"/></svg>';
+function urgChip(it) {
+  const n = daysUntil(it.due);
+  if (followDue(it)) return `<span class="chip follow">Follow up</span>`;
+  if (n != null && n < 0) return `<span class="chip overdue">Overdue ${-n}d</span>`;
+  const u = URG[effUrg(it)];
+  const due = n != null ? ` · ${n === 0 ? 'today' : fmtDate(it.due)}` : '';
+  return `<span class="chip ${u}">${URG_LABEL[u]}${due}</span>`;
+}
+function easeChip(e) {
+  const k = EASE.indexOf(e);
+  return `<span class="chip ${e}" title="Ease: ${EASE_LABEL[e]}"><span class="meter" aria-hidden="true">${[0,1,2].map(j => `<i class="${j <= k ? 'on' : ''}"></i>`).join('')}</span>${EASE_LABEL[e]}</span>`;
+}
+function metaLine(it) {
+  const p = proj(it.projectId); if (!p) return '';
+  const c = catOf(p.categoryId);
+  let s = `${esc(p.title)} · ${esc(c?.name || '')}${p.sub ? ' › ' + esc(p.sub) : ''}`;
+  if (shared && it.handedBy && it.handedBy !== shared.me && mine(it)) s += ` · <span class="who">from ${esc(nameOf(it.handedBy))}</span>`;
+  if (followDue(it)) s += ` · was waiting on ${esc(it.waitingOn || 'someone')}`;
+  return s;
+}
+const pcls = it => 'pri-' + prioOf(proj(it.projectId));
+function rowHTML(it) {
+  const title = followDue(it) ? `Check in: ${esc(it.title)}` : esc(it.title);
+  return `<li class="row ${pcls(it)}">
+    <button class="check" data-act="done" data-id="${it.id}" aria-label="Mark “${esc(it.title)}” done">${CHECK}</button>
+    <div><div class="step">${title}</div><div class="meta">${metaLine(it)}</div></div>
+    <div class="chips">${urgChip(it)}${easeChip(effEase(it))}</div>
+    <div class="acts">${followDue(it) ? `<button class="btn ghost small" data-act="nudge" data-id="${it.id}">Nudge</button>` : ''}<button class="btn ghost small" data-act="${it.ball ? 'wait' : 'back'}" data-id="${it.id}">${it.ball ? 'Hand off' : 'Ball’s back'}</button><button class="btn ghost small" data-act="edit" data-id="${it.id}">Edit</button></div>
+  </li>`;
+}
+
+/* ---------- views ---------- */
+const view = document.getElementById('view');
+let pendingRender = false;
+function softRender() {
+  const a = document.activeElement;
+  if (a && view.contains(a) && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.type !== 'radio' && a.type !== 'file') { pendingRender = true; return; }
+  render();
+}
+view.addEventListener('focusout', () => { if (pendingRender) { pendingRender = false; setTimeout(render, 0); } });
+
+function needsWelcome() { return shared ? (shared.loaded.cats && !shared.hasCats) : S.ui.view === 'welcome'; }
+function render() {
+  const v = needsWelcome() ? 'welcome' : (S.ui.view === 'welcome' ? 'now' : S.ui.view);
+  document.querySelectorAll('nav.tabs button').forEach(b => b.setAttribute('aria-current', b.dataset.view === v ? 'page' : 'false'));
+  const nWait = S.items.filter(onShelf).length;
+  const nw = document.getElementById('n-wait'); nw.textContent = nWait; nw.hidden = !nWait;
+  renderTeam();
+  let banner = '';
+  if (!shared && S.isExample) banner = `<div class="banner"><span class="sp"><b>You're looking at example data.</b> Import your triage spreadsheet, or start with an empty list.</span><button class="btn primary small" data-act="goto" data-v="dump">Start with a brain dump</button><button class="btn small" data-act="import">Import my spreadsheet</button><button class="btn ghost small" data-act="fresh">Start empty</button></div>`;
+  if (shared && !(shared.loaded.items && shared.loaded.projects && shared.loaded.cats)) banner = `<div class="banner"><span class="sp">Loading your shared list…</span></div>`;
+  document.getElementById('banner').innerHTML = banner;
+  ({now:renderNow, dump:renderDump, projects:renderProjects, waiting:renderWaiting, done:renderDone, setup:renderSetup, welcome:renderWelcome})[v]();
+  save();
+  if (shared) refreshNames();
+}
+function renderTeam() {
+  const t = document.getElementById('team');
+  if (!shared || shared.members.length < 2) { t.hidden = true; return; }
+  const ids = [shared.me, ...shared.members.filter(x => x !== shared.me)];
+  t.hidden = false;
+  t.innerHTML = `<span class="dots">${ids.slice(0, 5).map(id => `<span style="background:${esc(shared.colors[id] || '#6B7589')}" title="${esc(nameOf(id))}">${esc((nameOf(id) || '?').charAt(0))}</span>`).join('')}</span><span>Shared list</span>`;
+}
+
+function renderNow() {
+  const mode = S.ui.mode;
+  const all = rankList('all');
+  const L = rankList(mode);
+  const asap = all.filter(i => effUrg(i) === 0).length;
+  const fu = all.filter(followDue).length;
+  const waiting = S.items.filter(i => onShelf(i) && !followDue(i)).length;
+  const [top, ...rest] = L;
+  const m = MODES.find(x => x.id === mode);
+  const emptyMsg = {
+    '15': 'Nothing quick and easy is on you right now. Try “Open hour”, or check in on your Waiting shelf.',
+    'empty': 'Nothing easy is on you right now. Take the break.',
+    '60': 'Nothing easy or medium is on you right now.',
+    'deep': 'No medium or hard steps are on you. Good time to plan the next big thing.',
+    'all': shared ? 'Nothing is in your court. Add a next step, or import your spreadsheet in Setup.' : 'Nothing is in your court. Add a next step to get started.'}[mode];
+  view.innerHTML = `
+  <section class="picker">
+    <div class="picker-h"><h2>How much time do you have?</h2><span class="eyebrow">${new Date().toLocaleDateString(undefined, {weekday:'long', month:'long', day:'numeric'})}</span></div>
+    <div class="modes" role="group" aria-label="Time available">${MODES.map(x => `<button class="mode" data-act="mode" data-m="${x.id}" aria-pressed="${x.id === mode}"><b>${x.t}</b><span>${x.d}</span></button>`).join('')}</div>
+    <div class="stats"><span><b>${all.length}</b> in your court</span><span><b>${asap}</b> ASAP</span><span><b>${fu}</b> follow-ups due</span><span><b>${waiting}</b> waiting on others</span></div>
+  </section>
+  ${top ? `
+  <article class="pick ${pcls(top)}">
+        <div class="body"><div class="eyebrow">Do this next · ${esc(m.t)}</div>
+      <div class="step">${followDue(top) ? 'Check in: ' : ''}${esc(top.title)}</div><div class="meta">${metaLine(top)}</div>
+      <div class="chips">${urgChip(top)}${easeChip(effEase(top))}<span class="chip pri">${PRI_LABEL[prioOf(proj(top.projectId))]} priority</span></div></div>
+    <div class="actions">${followDue(top) ? `<button class="btn primary" data-act="nudge" data-id="${top.id}">Nudge</button>` : ''}<button class="btn ${followDue(top) ? '' : 'primary'}" data-act="done" data-id="${top.id}">Done</button><button class="btn" data-act="${top.ball ? 'wait' : 'back'}" data-id="${top.id}">${top.ball ? 'Hand off' : 'Ball’s back'}</button><button class="btn ghost" data-act="edit" data-id="${top.id}">Edit</button></div>
+  </article>` : `<div class="empty" style="margin-top:18px">${emptyMsg}</div>`}
+  <div class="section-h"><h2>${rest.length ? 'Then' : ''}</h2><div class="btnrow"><button class="btn small" data-act="goto" data-v="dump">Brain dump</button><button class="btn brand small" data-act="new">Add a next step</button></div></div>
+  ${rest.length ? `<ul class="rows">${rest.map(rowHTML).join('')}</ul>` : ''}
+  <p class="footnote">${mode === 'empty' ? 'Running on empty shows easy steps with the nearest deadlines first, so low-energy time still clears what’s due.' : `Ranked by priority, then urgency, then ease${mode === 'deep' ? ', with hard steps first so the big block goes to the big task' : ''}.`} Only steps in your court appear here. Everything else waits on the Waiting shelf.</p>`;
+}
+
+function renderProjects() {
+  const byCat = S.categories.map(c => {
+    const ps = S.projects.filter(p => p.categoryId === c.id && !p.archived).sort((a, b) => PRI.indexOf(prioOf(a)) - PRI.indexOf(prioOf(b)) || a.title.localeCompare(b.title));
+    const groups = [...c.subs, ''].map(sub => [sub, ps.filter(p => (p.sub || '') === sub || (sub === '' && p.sub && !c.subs.includes(p.sub)))]).filter(g => g[1].length);
+    return `<section class="cat"><h2>${esc(c.name)} <span class="eyebrow">${ps.length} project${ps.length === 1 ? '' : 's'}</span></h2>
+      ${groups.length ? groups.map(([sub, list]) => `<div class="sub">${sub || c.subs.length ? `<span class="eyebrow">${esc(sub || 'Other')}</span>` : ''}<div class="pgrid">${list.map(projCard).join('')}</div></div>`).join('') : '<p class="muted" style="margin:8px 0 0">No projects yet.</p>'}
+    </section>`;
+  }).join('');
+  const orphans = S.projects.filter(p => !p.archived && !catOf(p.categoryId));
+  const archived = S.projects.filter(p => p.archived);
+  view.innerHTML = `<div class="section-h" style="margin-top:26px"><h2 style="font-size:34px">Projects</h2><button class="btn brand small" data-act="newproj">New project</button></div>
+    <p class="intro">A project can hold one next step or many. Split it into steps when there’s more than one thing you could do next, so each gets its own ease and urgency.${shared ? ' Priority is personal: each person sets their own.' : ''}</p>
+    ${byCat}
+    ${orphans.length ? `<section class="cat"><h2>Uncategorized</h2><div class="pgrid" style="margin-top:10px">${orphans.map(projCard).join('')}</div></section>` : ''}
+    ${archived.length ? `<section class="cat"><h2>Archived <span class="eyebrow">${archived.length}</span></h2><div class="pgrid" style="margin-top:10px">${archived.map(projCard).join('')}</div></section>` : ''}`;
+}
+function projCard(p) {
+  const steps = S.items.filter(i => i.projectId === p.id && !i.done);
+  const doneN = S.items.filter(i => i.projectId === p.id && i.done).length;
+  const label = i => {
+    if (shared && ownerOf(i) !== shared.me) return `<span><span class="who">${esc(nameOf(ownerOf(i)))}:</span> ${esc(i.title)}</span>`;
+    return `<span>${i.ball ? '' : 'Waiting: '}${esc(i.title)}</span>`;
+  };
+  return `<article class="pcard pri-${prioOf(p)}">
+    <div class="head"><h3>${esc(p.title)}</h3><span class="chip pri">${PRI_LABEL[prioOf(p)]}</span></div>
+    ${p.notes ? `<div class="meta">${esc(p.notes)}</div>` : ''}
+    ${steps.length ? `<ul class="psteps">${steps.map(i => `<li><button data-act="edit" data-id="${i.id}" class="${i.ball && mine(i) ? '' : 'wait'}">${label(i)}${i.ball && mine(i) ? easeChip(i.ease) : ''}</button></li>`).join('')}</ul>` : p.archived ? '' : '<div class="hint">No next step. Add one so it shows up in Now.</div>'}
+    <div class="foot">${p.archived ? `<button class="btn small" data-act="unarchive" data-id="${p.id}">Restore</button>` : `<button class="btn small" data-act="newstep" data-id="${p.id}">Add step</button>`}<button class="btn ghost small" data-act="editproj" data-id="${p.id}">Edit project</button>${doneN ? `<span class="meta">${doneN} done</span>` : ''}</div>
+  </article>`;
+}
+
+function renderWaiting() {
+  const L = S.items.filter(onShelf).sort((a, b) => (a.followUp || '9999').localeCompare(b.followUp || '9999'));
+  view.innerHTML = `<div class="section-h" style="margin-top:26px"><h2 style="font-size:34px">Waiting</h2></div>
+  <p class="intro">The ball is in someone else’s court. Give a step a follow-up date and it comes back to Now as an easy check-in on that day.${shared ? ' Steps you handed to a teammate stay here until they finish them.' : ''}</p>
+  ${L.length ? `<ul class="rows">${L.map(i => {
+    const p = proj(i.projectId);
+    if (handedAway(i)) return `<li class="row ${pcls(i)}"><span></span>
+      <div><div class="step">${esc(i.title)}</div><div class="meta">${esc(p?.title || '')}</div></div>
+      <div class="chips"><span class="chip court">In ${esc(nameOf(ownerOf(i)))}’s court</span></div>
+      <div class="acts"><button class="btn ghost small" data-act="reclaim" data-id="${i.id}">Take it back</button><button class="btn ghost small" data-act="edit" data-id="${i.id}">Edit</button></div></li>`;
+    const n = daysUntil(i.followUp);
+    const fu = i.followUp ? `<span class="chip ${n <= 0 ? 'follow' : ''}">${n < 0 ? `Follow-up ${-n}d ago` : n === 0 ? 'Follow up today' : 'Follow up ' + fmtDate(i.followUp)}</span>` : '<span class="chip">No follow-up date</span>';
+    return `<li class="row ${pcls(i)}">
+      <button class="check" data-act="done" data-id="${i.id}" aria-label="Mark “${esc(i.title)}” done">${CHECK}</button>
+      <div><div class="step">${esc(i.title)}</div><div class="meta">${i.waitingOn ? 'Waiting on ' + esc(i.waitingOn) + ' · ' : ''}${esc(p?.title || '')}</div></div>
+      <div class="chips">${fu}</div>
+      <div class="acts"><button class="btn ghost small" data-act="nudge" data-id="${i.id}">Nudge</button><button class="btn ghost small" data-act="back" data-id="${i.id}">Ball’s back</button><button class="btn ghost small" data-act="edit" data-id="${i.id}">Edit</button></div></li>`;
+  }).join('')}</ul>` : '<div class="empty">Nothing is waiting on other people.</div>'}`;
+}
+
+function weekStart(iso) { const d = new Date(iso); d.setHours(0,0,0,0); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return d; }
+function renderDone() {
+  const mineDone = i => !shared || i.doneBy === shared.me || i.handedBy === shared.me || (!i.doneBy && mine(i));
+  const L = S.items.filter(i => i.done && mineDone(i)).sort((a, b) => (b.doneAt || '').localeCompare(a.doneAt || ''));
+  const year = new Date().getFullYear();
+  const tally = {};
+  L.filter(i => new Date(i.doneAt).getFullYear() === year).forEach(i => { const c = catOf(proj(i.projectId)?.categoryId)?.name || 'Other'; tally[c] = (tally[c] || 0) + 1; });
+  const weeks = [];
+  L.forEach(i => { const w = weekStart(i.doneAt).getTime(); let g = weeks.find(x => x.w === w); if (!g) weeks.push(g = {w, items:[]}); g.items.push(i); });
+  const by = i => shared && i.doneBy && i.doneBy !== shared.me ? ` · <span class="who">done by ${esc(nameOf(i.doneBy))}</span>` : '';
+  view.innerHTML = `<div class="section-h" style="margin-top:26px"><h2 style="font-size:34px">Done</h2></div>
+  <p class="intro">Everything you’ve finished, week by week. Handy for weekly check-ins and your annual review.</p>
+  ${Object.keys(tally).length ? `<div class="tally">${Object.entries(tally).map(([k, v]) => `<span class="chip">${esc(k)} · ${v} in ${year}</span>`).join('')}</div>` : ''}
+  ${weeks.length ? weeks.map(g => `<div class="week"><h3>Week of ${new Date(g.w).toLocaleDateString(undefined, {month:'long', day:'numeric'})} <span class="eyebrow">${g.items.length} done</span></h3>
+    <ul class="rows">${g.items.map(i => `<li class="row ${pcls(i)}"><span></span><div><div class="step">${esc(i.title)}</div><div class="meta">${metaLine(i)} · ${fmtDate(i.doneAt)}${by(i)}</div></div><span></span><div class="acts"><button class="btn ghost small" data-act="undone" data-id="${i.id}">Undo</button></div></li>`).join('')}</ul></div>`).join('') : '<div class="empty" style="margin-top:14px">Nothing marked done yet.</div>'}`;
+}
+
+function renderWelcome() {
+  view.innerHTML = `<section class="welcome">
+    <span class="eyebrow">Welcome to Backtoit</span>
+    <h2 style="margin-top:8px">Who’s this for?</h2>
+    <p>Pick a starting set of categories. You can rename, add or remove them any time in Setup.${shared ? ' This sets them up for everyone on this shared list.' : ''}</p>
+    <div class="roles">${Object.entries(ROLES).map(([k, r]) => `<button class="role" data-act="role" data-role="${k}"><b>${r.label}</b><span>${r.d}</span><span class="meta">${r.cats.map(c => esc(c[0])).join(' · ')}</span></button>`).join('')}</div>
+  </section>`;
+}
+
+function renderSetup() {
+  const used = id => S.projects.some(p => p.categoryId === id);
+  const hasX = typeof XLSX !== 'undefined';
+  const canSave = !window.claude || !!downloads;
+  view.innerHTML = `
+  <div class="section-h" style="margin-top:26px"><h2 style="font-size:34px">Setup</h2></div>
+  <section class="panel">
+    <h2>Import your triage spreadsheet</h2>
+    <p class="muted">Reads an Excel or CSV file with columns like Project, Ball in my court? (or Require Action?), Priority, Urgency, Ease and Next To Do. Rows in all caps with nothing else filled in (MANUSCRIPTS, TEACHING) become categories. Submitted papers go to the Waiting shelf.</p>
+    ${hasX ? '' : '<p class="hint">The spreadsheet reader didn’t load. Check your internet connection and reload the page.</p>'}
+    <div class="btnrow">
+      <label class="drop" id="imp-drop" for="imp-file"><b>Choose a spreadsheet</b><span>or drag an Excel or CSV file here</span></label>
+      <input type="file" id="imp-file" accept=".xlsx,.xls,.csv" hidden ${hasX ? '' : 'disabled'}>
+      ${shared ? '<span class="help">Imported projects are added to the shared list as yours.</span>' : `<div class="seg" style="flex:0 1 auto"><label><input type="radio" name="imp-mode" value="replace" checked><span>Replace current list</span></label><label><input type="radio" name="imp-mode" value="add"><span>Add to it</span></label></div>`}
+    </div>
+    <div id="imp-result"></div>
+  </section>
+  <section class="panel">
+    <h2>Categories</h2>
+    <p class="muted">Rename, add or remove categories and their subcategories. Separate subcategories with commas.</p>
+    ${S.categories.map(c => `<div class="catedit"><input type="text" value="${esc(c.name)}" data-cat="${c.id}" data-f="name" aria-label="Category name"><input class="subs" type="text" value="${esc(c.subs.join(', '))}" data-cat="${c.id}" data-f="subs" aria-label="Subcategories for ${esc(c.name)}" placeholder="Subcategories, separated by commas"><button class="btn ghost small" data-act="delcat" data-id="${c.id}" ${used(c.id) ? 'disabled title="Move or delete its projects first"' : ''}>Remove</button></div>`).join('')}
+    <div class="btnrow"><button class="btn small" data-act="addcat">Add category</button></div>
+    <div class="btnrow"><span class="help">Add a starter set:</span>${Object.entries(ROLES).map(([k, r]) => `<button class="btn ghost small" data-act="addrole" data-role="${k}">${r.label}</button>`).join('')}</div>
+  </section>
+  <section class="panel">
+    <h2>Back up and export</h2>
+    <p class="muted">${shared ? 'This list is shared with everyone you’ve given access to this page, and saves as you go.' : 'Your list is saved in this browser only. Download a backup now and then, and restore it on another computer.'}</p>
+    ${canSave ? '' : '<p class="hint">Downloads aren’t available in this view.</p>'}
+    <div class="btnrow">
+      <button class="btn" data-act="export-xlsx" ${hasX && canSave ? '' : 'disabled'}>Export to Excel</button>
+      <button class="btn" data-act="backup" ${canSave ? '' : 'disabled'}>Download backup</button>
+      ${shared ? '' : '<label class="btn" for="restore-file">Restore from backup</label><input type="file" id="restore-file" accept=".json" hidden>'}
+    </div>
+  </section>
+  ${shared ? '' : `<section class="panel">
+    <h2>Start over</h2>
+    <div class="btnrow"><button class="btn" data-act="example">Load example data</button><button class="btn" data-act="fresh">Start empty</button><button class="btn danger" data-act="wipe">Clear everything</button></div>
+  </section>`}`;
+  document.getElementById('imp-file')?.addEventListener('change', onImport);
+  const drop = document.getElementById('imp-drop');
+  if (drop) {
+    ['dragenter','dragover'].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add('over'); }));
+    ['dragleave','drop'].forEach(t => drop.addEventListener(t, () => drop.classList.remove('over')));
+    drop.addEventListener('drop', e => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f && hasX) onImport({target:{files:[f]}}); });
+  }
+  document.getElementById('restore-file')?.addEventListener('change', onRestore);
+  view.querySelectorAll('[data-cat]').forEach(inp => inp.addEventListener('change', () => {
+    const c = catOf(inp.dataset.cat);
+    if (inp.dataset.f === 'name') c.name = inp.value.trim() || c.name;
+    else c.subs = inp.value.split(',').map(s => s.trim()).filter(Boolean);
+    putCats(); save(); toast('Categories saved');
+  }));
+}
+
+/* ---------- import / export ---------- */
+function mapSection(s) {
+  const t = s.toLowerCase();
+  if (/manuscript|paper|publication/.test(t)) return ['Research', 'Papers'];
+  if (/proposal/.test(t)) return ['Research', 'Grants & proposals'];
+  if (/project|grant/.test(t)) return ['Research', 'Projects'];
+  if (/teach|course/.test(t)) return ['Teaching', ''];
+  if (/servic|committee/.test(t)) return ['Service', ''];
+  if (/mentor|student|advis/.test(t)) return ['Mentoring', ''];
+  return [s.charAt(0) + s.slice(1).toLowerCase(), ''];
+}
+function ensureCat(name) {
+  let c = S.categories.find(x => x.name.toLowerCase() === name.toLowerCase());
+  if (!c) { c = {id:uid(), name, subs:[]}; S.categories.push(c); }
+  return c;
+}
+function parseWorkbook(wb) {
+  const out = {projects:[], items:[], sheets:[], noSection:0};
+  wb.SheetNames.forEach(name => {
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[name], {header:1, defval:null, raw:false, blankrows:false});
+    let h = -1;
+    for (let i = 0; i < Math.min(rows.length, 10); i++) {
+      const r = (rows[i] || []).map(c => String(c ?? '').toLowerCase());
+      if (r.some(c => /ball|action/.test(c)) && r.some(c => /priority/.test(c))) { h = i; break; }
+    }
+    if (h < 0) return;
+    const hdr = rows[h].map(c => String(c ?? '').trim());
+    const col = re => hdr.findIndex((c, i) => i > 0 && re.test(c.toLowerCase()));
+    const cBall = col(/ball|action/), cPri = col(/priority/), cUrg = col(/urgen/), cEase = col(/ease/);
+    const nexts = hdr.map((c, i) => /next/i.test(c) ? i : -1).filter(i => i > 0);
+    const extras = hdr.map((c, i) => ({c, i})).filter(o => o.i > 0 && o.c && ![cBall, cPri, cUrg, cEase, ...nexts].includes(o.i));
+    let section = null, n = 0;
+    for (let i = h + 1; i < rows.length; i++) {
+      const r = rows[i] || [];
+      const v = j => j >= 0 ? String(r[j] ?? '').trim() : '';
+      const title = v(0); if (!title) continue;
+      const rest = r.slice(1).some(x => x != null && String(x).trim() !== '');
+      if (!rest && title === title.toUpperCase() && /[A-Z]/.test(title)) { section = title; continue; }
+      const [cat, sub] = section ? mapSection(section) : ['Research', ''];
+      if (!section) out.noSection++;
+      const all = r.map(x => String(x ?? '')).join(' ').toLowerCase();
+      const submitted = /su[bm]{2}itt?ed/.test(all);
+      const b = v(cBall).toLowerCase();
+      const pr = v(cPri).toLowerCase(), ur = v(cUrg).toLowerCase(), ea = v(cEase).toLowerCase();
+      const rated = [b, pr, ur, ea].some(x => x && !/^n\/?a$/.test(x));
+      const nx = nexts.map(v).filter(Boolean);
+      const notes = extras.map(o => v(o.i) ? `${o.c}: ${v(o.i)}` : '').filter(Boolean).join(' · ');
+      const p = {id:uid(), title, cat, sub, priority: /^h/.test(pr) ? 'high' : /^l/.test(pr) ? 'low' : 'medium', notes, archived:false};
+      const it = {id:uid(), projectId:p.id, title:'', ball:true, waitingOn:'', followUp:'', urgency:'none', due:'', ease:'medium', notes:'', done:false, doneAt:'', created:new Date().toISOString()};
+      if (submitted) {
+        it.title = 'Under review'; it.ball = false; it.waitingOn = 'Journal' + (nx[0] ? ` (${nx[0]})` : ''); it.ease = 'easy';
+        p.priority = 'medium';
+      } else {
+        it.title = nx[0] || (rated ? 'Decide the next step' : 'Rate this project and add a next step');
+        it.notes = nx.slice(1).join('\n');
+        it.ball = !/^n/.test(b);
+        it.urgency = /asap|now|urgent/.test(ur) ? 'asap' : /^day/.test(ur) ? 'days' : /^week/.test(ur) ? 'weeks' : /^mon/.test(ur) ? 'months' : 'none';
+        it.ease = /^e/.test(ea) ? 'easy' : /^h/.test(ea) ? 'hard' : rated ? 'medium' : 'easy';
+        if (/^n\/?a$/.test(pr)) p.priority = 'low';
+      }
+      out.projects.push(p); out.items.push(it); n++;
+    }
+    out.sheets.push(`${name}: ${n} project${n === 1 ? '' : 's'}`);
+  });
+  return out;
+}
+async function onImport(e) {
+  const f = e.target.files[0]; if (!f) return;
+  const mode = shared ? 'add' : document.querySelector('input[name="imp-mode"]:checked').value;
+  const res = document.getElementById('imp-result');
+  let out;
+  try { out = parseWorkbook(XLSX.read(await f.arrayBuffer(), {type:'array'})); }
+  catch (err) { res.innerHTML = `<div class="result">Couldn’t read that file (${esc(err.message)}). Save it as .xlsx and try again.</div>`; return; }
+  if (!out.projects.length) { res.innerHTML = `<div class="result">No triage table found. The file needs a header row with a “Priority” column and a “Ball in my court?” or “Require Action?” column.</div>`; return; }
+  if (!shared && (mode === 'replace' || S.isExample)) { const ui = S.ui; local = S = blankState(); S.ui = ui; }
+  const now = new Date().toISOString();
+  const projs = out.projects.map(p => {
+    const c = ensureCat(p.cat); if (p.sub && !c.subs.includes(p.sub)) c.subs.push(p.sub);
+    const q = {id:p.id, title:p.title, categoryId:c.id, sub:p.sub, priority:p.priority, notes:p.notes, archived:false};
+    if (shared) Object.assign(q, {createdBy:shared.me, prio:{[shared.me]:p.priority}});
+    return q;
+  });
+  const items = out.items.map(i => shared ? Object.assign(i, {owner:shared.me, createdBy:shared.me, handedBy:'', created:now}) : i);
+  S.projects.push(...projs); S.items.push(...items); S.isExample = false;
+  const inCourt = items.filter(i => i.ball).length;
+  let msg = `Imported ${projs.length} projects from ${f.name}.\n${out.sheets.join('\n')}\n${inCourt} need something from you; ${items.length - inCourt} are on the Waiting shelf.`;
+  if (out.noSection) msg += `\n${out.noSection} rows had no category heading and were put under Research. Change them in Projects › Edit project.`;
+  if (shared) {
+    putCats();
+    const docs = [...projs.map(p => ['projects/' + p.id, p]), ...items.map(i => ['items/' + i.id, i])];
+    let k = 0;
+    try { for (const [path, d] of docs) { res.innerHTML = `<div class="result">Saving ${++k} of ${docs.length}…</div>`; await shared.db.doc(path).set(strip(d)); } }
+    catch (err) { dbErr(err); res.innerHTML = `<div class="result">Saved ${k - 1} of ${docs.length} before an error. Import the file again to finish; duplicates can be deleted in Projects.</div>`; return; }
+  }
+  save(); render();
+  document.getElementById('imp-result').innerHTML = `<div class="result">${esc(msg)}</div>`;
+}
+async function saveFile(name, data) {
+  if (downloads) {
+    try { await downloads.save({filename:name, data}); toast('Saved ' + name); }
+    catch (e) { if (e && e.code !== 'declined') toast('Couldn’t save the file here.'); }
+    return;
+  }
+  const blob = data instanceof Blob ? data : new Blob([data]);
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+function exportXlsx() {
+  const ranked = rankList('all'); const order = new Map(ranked.map((i, k) => [i.id, k]));
+  const items = [...S.items].sort((a, b) => (a.done - b.done) || ((order.get(a.id) ?? 1e6) - (order.get(b.id) ?? 1e6)));
+  const rows = items.map(i => { const p = proj(i.projectId) || {}; return {
+    'Rank': order.has(i.id) ? order.get(i.id) + 1 : '', 'Category': catOf(p.categoryId)?.name || '', 'Subcategory': p.sub || '', 'Project': p.title || '',
+    'Priority': prioOf(p), 'Next step': i.title, ...(shared ? {'Whose court': nameOf(ownerOf(i))} : {}), 'Ball in my court?': i.ball ? 'yes' : 'no', 'Waiting on': i.waitingOn, 'Follow up': i.followUp,
+    'Urgency': i.urgency, 'Due': i.due, 'Ease': i.ease, 'Status': i.done ? 'done' : p.archived ? 'archived' : 'open', 'Done on': i.doneAt ? i.doneAt.slice(0,10) : '', 'Notes': [p.notes, i.notes].filter(Boolean).join(' | ') }; });
+  const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rows), 'Backtoit');
+  saveFile(`Backtoit-${todayISO()}.xlsx`, new Blob([XLSX.write(wb, {bookType:'xlsx', type:'array'})]));
+}
+function onRestore(e) {
+  const f = e.target.files[0]; if (!f) return;
+  f.text().then(t => { const d = JSON.parse(t); if (!d.projects || !d.items) throw new Error('not a Backtoit backup'); const ui = S.ui; local = S = d; S.ui = ui; S.ui.view = 'now'; render(); toast('Backup restored'); })
+    .catch(err => toast(`Couldn’t restore: ${err.message}`));
+}
+
+/* ---------- dialogs ---------- */
+const $ = id => document.getElementById(id);
+function segHTML(name, values, labels, current) { return values.map(v => `<label><input type="radio" name="${name}" value="${v}" ${v === current ? 'checked' : ''}><span>${labels[v]}</span></label>`).join(''); }
+const segVal = name => document.querySelector(`input[name="${name}"]:checked`)?.value;
+function fillCatSelects(catSel, subSel, catId, sub) {
+  catSel.innerHTML = S.categories.map(c => `<option value="${c.id}" ${c.id === catId ? 'selected' : ''}>${esc(c.name)}</option>`).join('');
+  const fillSub = () => { const c = catOf(catSel.value); const subs = [...(c?.subs || [])]; if (sub && !subs.includes(sub) && c?.id === catId) subs.push(sub);
+    subSel.innerHTML = `<option value="">None</option>` + subs.map(s => `<option ${s === sub ? 'selected' : ''}>${esc(s)}</option>`).join(''); };
+  fillSub(); catSel.onchange = () => { sub = ''; fillSub(); };
+}
+const teammates = () => shared ? shared.members.filter(x => x !== shared.me) : [];
+let editing = null;
+function openStep(id, preset = {}) {
+  const it = id ? S.items.find(i => i.id === id) : Object.assign({title:'', ball:true, waitingOn:'', followUp:'', urgency:'weeks', due:'', ease:'medium', notes:'', projectId:S.projects.find(p => !p.archived)?.id || ''}, preset);
+  editing = id || null;
+  $('stepDlgTitle').textContent = id ? 'Edit step' : 'Add a next step';
+  $('f-project').innerHTML = S.projects.filter(p => !p.archived || p.id === it.projectId).map(p => `<option value="${p.id}" ${p.id === it.projectId ? 'selected' : ''}>${esc(p.title)}</option>`).join('') + '<option value="__new">New project…</option>';
+  if (!S.projects.length) $('f-project').value = '__new';
+  $('f-title').value = it.title; $('f-waiting').value = it.waitingOn || ''; $('f-follow').value = it.followUp || ''; $('f-due').value = it.due || ''; $('f-notes').value = it.notes || '';
+  const owner = id ? ownerOf(it) : me();
+  const onMe = !preset.handoff && it.ball && (!shared || owner === shared.me);
+  $('f-ball').innerHTML = segHTML('f-ball', ['yes','no'], {yes:'Mine', no:'Someone else’s'}, onMe ? 'yes' : 'no');
+  const mates = teammates();
+  $('f-to').innerHTML = mates.map(m => `<option value="${m}" ${m === owner ? 'selected' : ''}>${esc(nameOf(m))} (in this app)</option>`).join('') + `<option value="__out" ${!mates.includes(owner) ? 'selected' : ''}>Someone outside the app</option>`;
+  $('f-urg').innerHTML = segHTML('f-urg', URG, URG_LABEL, it.urgency);
+  $('f-ease').innerHTML = segHTML('f-ease', EASE, {easy:'Easy · 15 min', medium:'Medium', hard:'Hard · deep work'}, it.ease);
+  $('f-np-title').value = '';
+  $('f-np-pri').innerHTML = segHTML('f-np-pri', PRI, PRI_LABEL, 'medium');
+  fillCatSelects($('f-np-cat'), $('f-np-sub'), S.categories[0]?.id, '');
+  const sync = () => {
+    const no = segVal('f-ball') === 'no';
+    const out = !shared || !mates.length || $('f-to').value === '__out';
+    $('f-newproj').hidden = $('f-project').value !== '__new';
+    $('f-tofield').hidden = !no || !shared || !mates.length;
+    $('f-waitfields').hidden = !no || !out;
+    $('f-tohelp').textContent = out ? '' : `It moves to ${nameOf($('f-to').value)}’s Now list. You’ll see it on your Waiting shelf until it’s done.`;
+    $('f-cal').hidden = $('f-waitfields').hidden;
+    if (!$('f-cal').hidden) $('f-cal').innerHTML = calLinks($('f-title').value.trim(), $('f-waiting').value.trim(), $('f-follow').value, proj($('f-project').value)?.title);
+  };
+  $('f-waiting').oninput = sync; $('f-follow').oninput = sync; $('f-title').oninput = sync;
+  $('f-project').onchange = sync; $('f-ball').onchange = sync; $('f-to').onchange = sync; sync();
+  $('f-delete').hidden = !id; armDelete($('f-delete'), 'Delete step');
+  $('stepDlg').showModal();
+  if (preset.handoff) (mates.length ? $('f-to') : $('f-waiting')).focus(); else if (!id) $('f-title').focus();
+}
+$('stepForm').addEventListener('submit', e => {
+  e.preventDefault();
+  let pid = $('f-project').value;
+  if (pid === '__new') {
+    const t = $('f-np-title').value.trim(); if (!t) { $('f-np-title').focus(); return; }
+    const pri = segVal('f-np-pri');
+    const p = {id:uid(), title:t, categoryId:$('f-np-cat').value, sub:$('f-np-sub').value, priority:pri, notes:'', archived:false};
+    if (shared) Object.assign(p, {createdBy:shared.me, prio:{[shared.me]:pri}});
+    S.projects.push(p); putProj(p); pid = p.id;
+  }
+  const no = segVal('f-ball') === 'no';
+  const to = shared && no && teammates().length ? $('f-to').value : '__out';
+  const data = {projectId:pid, title:$('f-title').value.trim(), ball:!no, waitingOn:$('f-waiting').value.trim(), followUp:$('f-follow').value,
+    urgency:segVal('f-urg'), due:$('f-due').value, ease:segVal('f-ease'), notes:$('f-notes').value};
+  const prev = editing ? S.items.find(i => i.id === editing) : null;
+  if (shared) {
+    if (no && to !== '__out') Object.assign(data, {owner:to, handedBy:shared.me, ball:true, waitingOn:'', followUp:''});
+    else Object.assign(data, {owner:shared.me, handedBy: prev && ownerOf(prev) === shared.me ? (prev.handedBy || '') : ''});
+  }
+  let it;
+  if (prev) it = Object.assign(prev, data);
+  else { it = Object.assign({id:uid(), done:false, doneAt:'', created:new Date().toISOString()}, shared ? {createdBy:shared.me} : {}, data); S.items.push(it); }
+  putItem(it);
+  if (!prev) S.isExample = false;
+  $('stepDlg').close(); render();
+  toast(shared && no && to !== '__out' ? `Handed to ${nameOf(to)}` : prev ? 'Step saved' : 'Step added');
+});
+$('f-cancel').onclick = () => $('stepDlg').close();
+$('f-delete').onclick = () => {
+  const it = S.items.find(i => i.id === editing); if (!it) return;
+  const copy = clean(it);
+  dropItem(it.id); $('stepDlg').close(); render();
+  toast('Step deleted', () => { S.items.push(copy); putItem(copy); render(); });
+};
+
+let editingProj = null;
+function openProj(id) {
+  const p = id ? proj(id) : {title:'', categoryId:S.categories[0]?.id, sub:'', priority:'medium', notes:''};
+  editingProj = id || null;
+  $('projDlgTitle').textContent = id ? 'Edit project' : 'New project';
+  $('p-prilabel').textContent = shared ? 'Your priority' : 'Priority';
+  $('p-title').value = p.title; $('p-notes').value = p.notes || '';
+  fillCatSelects($('p-cat'), $('p-sub'), p.categoryId, p.sub);
+  $('p-pri').innerHTML = segHTML('p-pri', PRI, PRI_LABEL, prioOf(p));
+  $('p-delete').hidden = !id; $('p-archive').hidden = !id || p.archived;
+  armDelete($('p-delete'), 'Delete');
+  $('projDlg').showModal();
+}
+$('projForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const pri = segVal('p-pri');
+  const data = {title:$('p-title').value.trim(), categoryId:$('p-cat').value, sub:$('p-sub').value, notes:$('p-notes').value};
+  let p, isNew = !editingProj;
+  if (editingProj) { p = Object.assign(proj(editingProj), data); if (shared) p.prio = Object.assign({}, p.prio, {[shared.me]:pri}); else p.priority = pri; }
+  else { p = Object.assign({id:uid(), archived:false, priority:pri}, data, shared ? {createdBy:shared.me, prio:{[shared.me]:pri}} : {}); S.projects.push(p); S.isExample = false; }
+  putProj(p);
+  $('projDlg').close(); render();
+  if (isNew) openStep(null, {projectId:p.id}); else toast('Project saved');
+});
+$('p-cancel').onclick = () => $('projDlg').close();
+$('p-archive').onclick = () => { const p = proj(editingProj); p.archived = true; putProj(p); $('projDlg').close(); render(); toast('Project archived. Its steps are hidden until you restore it.'); };
+$('p-delete').onclick = e => { if (!confirmClick(e.currentTarget)) return; S.items.filter(i => i.projectId === editingProj).forEach(i => dropItem(i.id)); dropProj(editingProj); $('projDlg').close(); render(); toast('Project and its steps deleted'); };
+
+function armDelete(btn, label) { btn.textContent = label; btn.dataset.armed = ''; btn.classList.remove('armed'); }
+function confirmClick(btn) {
+  if (btn.dataset.armed === '1') return true;
+  const label = btn.textContent; btn.dataset.armed = '1'; btn.textContent = 'Click again to delete'; btn.classList.add('armed');
+  setTimeout(() => { if (btn.dataset.armed === '1') { btn.dataset.armed = ''; btn.textContent = label; btn.classList.remove('armed'); } }, 5000);
+  return false;
+}
+
+/* ---------- toast ---------- */
+let toastT;
+function toast(msg, undo) {
+  const t = $('toast'); t.innerHTML = `<span>${esc(msg)}</span>${undo ? '<button id="undo">Undo</button>' : ''}`; t.hidden = false;
+  if (undo) $('undo').onclick = () => { undo(); t.hidden = true; };
+  clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 5000);
+}
+
+/* ---------- brain dump ---------- */
+function renderDump() {
+  if (dump.cards) return renderTriage();
+
+  view.innerHTML = `<section class="dump">
+    <span class="eyebrow">Brain dump</span>
+    <h2 class="dump-h">Tell us everything on your plate.</h2>
+    <p class="intro" style="margin-top:10px">Paste a messy list, rows from any spreadsheet or notes from a document, or add photos of paper lists and sticky notes. Backtoit sorts it all into projects and next steps and suggests ratings. Then you check them, one card at a time.</p>
+    ${!sampleFn ? `<div class="empty">The brain dump uses Claude to sort your list, so it works only when Backtoit runs inside claude.ai (see the README). In this downloaded copy, add projects and steps by hand on the Projects screen.</div>` : `
+    <div class="panel" style="margin-top:6px">
+      <textarea id="bd-text" aria-label="Everything on your plate" placeholder="Type or paste anything, in any order. For example:&#10;&#10;NSF proposal: budget to grants office by Friday, still need Broader Impacts&#10;Marsh paper: reviewer 2 comments, fix Fig 3 colors&#10;Waiting on Jamie's chapter 2 draft&#10;Reply to chair about the admissions meeting&#10;BIO 210: finish week 6 slides"></textarea>
+      <div class="attach">${dump.urls.map((u, k) => `<figure><img src="${u}" alt="Photo ${k + 1}"><button data-act="bd-rmimg" data-k="${k}" aria-label="Remove photo ${k + 1}">×</button></figure>`).join('')}${dump.files.map((f, k) => `<span class="chip">${esc(f.name)}<button data-act="bd-rmfile" data-k="${k}" aria-label="Remove ${esc(f.name)}">×</button></span>`).join('')}</div>
+      <div class="btnrow">
+        ${imgCaps ? `<label class="btn" for="bd-photos">Add photos of paper lists</label><input type="file" id="bd-photos" accept="${esc(imgCaps.mediaTypes.join(','))}" multiple hidden>` : ''}
+        <label class="btn" for="bd-file">Add a spreadsheet or text file</label><input type="file" id="bd-file" accept=".xlsx,.xls,.csv,.txt,.md" multiple hidden>
+      </div>
+      <span class="help">On a phone, tap the microphone on your keyboard to talk instead of typing.</span>
+      ${dump.busy ? `<div class="thinking"><span id="bd-status">${esc(dump.status)}</span><button class="btn small" data-act="bd-stop" style="margin-left:auto">Stop</button></div>`
+        : `<div class="btnrow"><button class="btn primary big" data-act="bd-go">Sort it out</button><span class="help">Usually takes under a minute.</span></div>`}
+      ${dump.err ? `<p class="hint" style="margin:0">${esc(dump.err)}</p>` : ''}
+    </div>
+    <p class="footnote">Leave out private student information such as grades or health details. First names are fine.</p>`}
+  </section>`;
+  const ta = document.getElementById('bd-text');
+  if (ta) { ta.value = dump.text; ta.disabled = dump.busy; ta.addEventListener('input', () => { dump.text = ta.value; }); }
+  document.getElementById('bd-photos')?.addEventListener('change', e => {
+    const room = (imgCaps?.maxCount || 5) - dump.images.length;
+    const picked = [...e.target.files];
+    picked.slice(0, Math.max(0, room)).forEach(f => { dump.images.push(f); dump.urls.push(URL.createObjectURL(f)); });
+    if (picked.length > room) toast(`Up to ${imgCaps?.maxCount || 5} photos at a time.`);
+    render();
+  });
+  document.getElementById('bd-file')?.addEventListener('change', async e => {
+    for (const f of e.target.files) {
+      try {
+        if (/\.(xlsx|xls|csv)$/i.test(f.name)) {
+          if (typeof XLSX === 'undefined') { toast('The spreadsheet reader didn’t load. Reload and try again.'); continue; }
+          const wb = XLSX.read(await f.arrayBuffer(), {type:'array'});
+          dump.files.push({name:f.name, text:wb.SheetNames.map(n => `Sheet "${n}":\n` + XLSX.utils.sheet_to_csv(wb.Sheets[n], {blankrows:false})).join('\n\n')});
+        } else if (/\.(txt|md)$/i.test(f.name)) dump.files.push({name:f.name, text:await f.text()});
+        else toast('Word and PDF files are coming. For now, copy the text and paste it in.');
+      } catch (err) { toast(`Couldn’t read ${f.name}.`); }
+    }
+    render();
+  });
+}
+function dumpPrompt(material) {
+  const cats = S.categories.map(c => `- ${c.name}${c.subs.length ? ` (subcategories: ${c.subs.join('; ')})` : ''}`).join('\n');
+  const existing = S.isExample ? [] : S.projects.filter(p => !p.archived).slice(0, 80).map(p => `- ${p.id}: ${p.title}`);
+  return `You are helping an academic set up Backtoit, an app that ranks their next steps. Today is ${todayISO()}.
+
+Turn the material below (typed notes, pasted spreadsheet rows${dump.images.length ? ', and the attached photos of handwritten or printed lists' : ''}) into projects and concrete next steps.
+
+Definitions:
+- A project is a paper, grant, course, committee, student, collaboration, etc.
+- A step is one concrete action, phrased as a short instruction in the person's own words ("Email Sam about the budget"). Keep titles under 12 words.
+- If a line names only a project with no action, give it one step: "Decide the next step".
+- Skip anything clearly already done. Do not invent work that isn't implied.
+
+Rate each step:
+- whose: "me" if the person has to act; "other" if they are waiting on someone or something (then set waitingOn to who or what, e.g. "Jamie" or "Journal review").
+- urgency: "asap" (today or overdue), "days" (within about 2 weeks), "weeks", "months", or "none". If a date is given or implied, also set due as YYYY-MM-DD.
+- ease: "easy" (under 15 minutes, little thought: emails, forms, quick replies), "medium", or "hard" (writing, analysis, deep thinking, anything needing a focused block).
+- why: a short phrase explaining the ratings, e.g. "quick email, due Friday".
+
+Rate each project's priority: "high" if it directly advances their career (papers, grants, promotion, leadership in their field); "low" for optional service or nice-to-haves; otherwise "medium". Use "medium" when unsure.
+
+category must be one of these (use the exact name); sub must be one of its subcategories or "":
+${cats}
+${existing.length ? `\nThe person already has these projects. If an item belongs to one, set existing to its id:\n${existing.join('\n')}\n` : ''}
+Reply with only JSON in this shape:
+{"projects":[{"title":"Marsh accretion paper","existing":null,"category":"Research","sub":"Papers","priority":"high","steps":[{"title":"Answer Reviewer 2 comments","whose":"me","waitingOn":"","urgency":"days","due":"","ease":"hard","why":"deep revision work, due soon"}]}]}
+
+Material:
+<<<
+${material}
+>>>`;
+}
+const SAMPLE_ERR = {
+  rate_limited:'Claude is busy, or you’ve reached your usage limit. Try again in a little while.',
+  invalid_json:'The answer came back garbled. Try again, or send less at once.',
+  prompt_too_large:'That’s too much for one go. Send about half now and the rest after.',
+  image_rejected:'One of the photos couldn’t be read. Try a clearer photo or a different file.',
+  refused:'Claude couldn’t sort that. Try rewording it or sending less.',
+  empty_completion:'Claude couldn’t sort that. Try rewording it or sending less.',
+  session_expired:'Your Claude session expired. Sign in again, then try again.',
+};
+async function runDump() {
+  const text = dump.text.trim();
+  if (!text && !dump.images.length && !dump.files.length) { dump.err = 'Type, paste or add something first.'; render(); return; }
+  dump.busy = true; dump.err = ''; dump.status = 'Reading your list…'; render();
+  dump.ctl = new AbortController();
+  const material = [text, ...dump.files.map(f => `--- From the file ${f.name} ---\n${f.text}`)].filter(Boolean).join('\n\n').slice(0, 45000) || '(See the attached photos.)';
+  const opts = {signal:dump.ctl.signal, modelTier:'default', onText:({text:t}) => {
+    const n = (t.match(/"ease"/g) || []).length; const el = document.getElementById('bd-status');
+    if (el && n) el.textContent = `Found ${n} step${n === 1 ? '' : 's'} so far…`; }};
+  if (dump.images.length) opts.images = dump.images;
+  try {
+    const cards = toCards(await sampleFn.json(dumpPrompt(material), opts));
+    if (cards.length) { dump.cards = cards; dump.i = 0; }
+    else dump.err = 'No tasks found in that. Try adding a bit more detail.';
+  } catch (e) {
+    const c = e && e.code;
+    if (['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed'].includes(c)) { sampleFn = null; }
+    else if (c === 'images_unavailable') { imgCaps = null; dump.err = 'Photos aren’t available here. Type or paste the list instead.'; }
+    else if (c !== 'cancelled') dump.err = SAMPLE_ERR[c] || 'Something went wrong reaching Claude. Try again.';
+  }
+  dump.busy = false; render();
+}
+function toCards(out) {
+  const cards = [];
+  (Array.isArray(out?.projects) ? out.projects : []).forEach(p => {
+    const title = String(p?.title || '').trim(); if (!title) return;
+    const ex = p.existing != null && proj(String(p.existing)) ? String(p.existing) : null;
+    const cat = S.categories.find(c => c.name.toLowerCase() === String(p.category || '').toLowerCase()) || S.categories[0];
+    const P = {key:uid(), title:ex ? proj(ex).title : title, existing:ex, categoryId:cat?.id || '', sub:cat && cat.subs.includes(p.sub) ? p.sub : '',
+      priority:ex ? prioOf(proj(ex)) : (PRI.includes(p.priority) ? p.priority : 'medium')};
+    (Array.isArray(p.steps) ? p.steps : []).forEach(st => {
+      const t = String(st?.title || '').trim(); if (!t) return;
+      cards.push({P, keep:null, title:t, ball:st.whose !== 'other', waitingOn:String(st.waitingOn || ''),
+        urgency:URG.includes(st.urgency) ? st.urgency : 'none', due:/^\d{4}-\d{2}-\d{2}$/.test(st.due || '') ? st.due : '',
+        ease:EASE.includes(st.ease) ? st.ease : 'medium', why:String(st.why || '')});
+    });
+  });
+  return cards;
+}
+function renderTriage() {
+  const cards = dump.cards, i = dump.i;
+  if (i >= cards.length) {
+    const kept = cards.filter(c => c.keep).length;
+    const nProj = new Set(cards.filter(c => c.keep).map(c => c.P.existing || c.P.title.toLowerCase())).size;
+    view.innerHTML = `<section class="dump"><span class="eyebrow">Quick triage · done</span>
+      <h2 class="dump-h">${kept ? `${kept} step${kept === 1 ? '' : 's'} across ${nProj} project${nProj === 1 ? '' : 's'}.` : 'Nothing kept.'}</h2>
+      <p class="intro" style="margin-top:10px">${kept ? 'Add them to your list and Backtoit will rank them for you.' : 'Go back to change your picks, or start over.'}</p>
+      <div class="btnrow">${kept ? `<button class="btn primary big" data-act="bd-commit">Add them to my list</button>` : ''}<button class="btn" data-act="tri-back">Back</button><button class="btn ghost" data-act="bd-reset">Start over</button></div></section>`;
+    return;
+  }
+  const c = cards[i];
+  const opt = (f, v, label, cur) => `<button class="opt" data-act="tri" data-f="${f}" data-v="${v}" aria-pressed="${cur === v}">${esc(label)}</button>`;
+  const cat = catOf(c.P.categoryId);
+  view.innerHTML = `<section class="dump">
+    <div class="tri-top"><span class="eyebrow">Quick triage · ${i + 1} of ${cards.length}</span><div class="bar-prog"><i style="width:${(i / cards.length * 100).toFixed(1)}%"></i></div></div>
+    <article class="tcard">
+      <div class="meta">${c.P.existing ? 'Existing project' : 'New project'}: <b>${esc(c.P.title)}</b>${cat ? ` · ${esc(cat.name)}${c.P.sub ? ' › ' + esc(c.P.sub) : ''}` : ''}</div>
+      <input type="text" id="tri-title" class="tri-title" value="${esc(c.title)}" aria-label="Next step (click to edit)">
+      ${c.why ? `<p class="why">Suggested: ${esc(c.why)}${c.due ? ` · due ${fmtDate(c.due)}` : ''}</p>` : ''}
+      <div class="tri-grid">
+        <span class="flabel">Whose court</span><div class="opts">${opt('ball', 'me', 'Mine', c.ball ? 'me' : 'other')}${opt('ball', 'other', 'Waiting' + (c.waitingOn ? ' on ' + c.waitingOn : ''), c.ball ? 'me' : 'other')}</div>
+        <span class="flabel">Priority <small>(whole project)</small></span><div class="opts">${PRI.map(v => opt('priority', v, PRI_LABEL[v], c.P.priority)).join('')}</div>
+        <span class="flabel">Urgency</span><div class="opts">${URG.map(v => opt('urgency', v, URG_LABEL[v], c.urgency)).join('')}</div>
+        <span class="flabel">Ease</span><div class="opts">${EASE.map(v => opt('ease', v, EASE_LABEL[v], c.ease)).join('')}</div>
+      </div>
+      <div class="tri-acts"><button class="btn" data-act="tri-skip">Skip</button><button class="btn primary big" data-act="tri-keep">Keep</button></div>
+    </article>
+    <div class="btnrow" style="margin-top:16px"><button class="btn ghost" data-act="tri-back" ${i ? '' : 'disabled'}>Back</button><button class="btn ghost" data-act="tri-all">Keep all the rest as suggested</button><button class="btn ghost" data-act="bd-reset">Start over</button></div>
+  </section>`;
+  const t = document.getElementById('tri-title');
+  t.addEventListener('input', () => { c.title = t.value; });
+}
+async function commitCards() {
+  const keep = dump.cards.filter(c => c.keep && c.title.trim());
+  if (!shared && S.isExample) { const ui = S.ui; local = S = blankState(); S.ui = ui; }
+  const made = new Map(), writes = [];
+  keep.forEach(c => {
+    let pid = c.P.existing && proj(c.P.existing) ? c.P.existing : null;
+    if (pid) {
+      const p = proj(pid);
+      if (prioOf(p) !== c.P.priority) { if (shared) p.prio = Object.assign({}, p.prio, {[shared.me]:c.P.priority}); else p.priority = c.P.priority; writes.push(['projects/' + p.id, p]); }
+    } else if (made.has(c.P.key)) pid = made.get(c.P.key);
+    else {
+      const same = S.projects.find(p => !p.archived && p.title.toLowerCase() === c.P.title.toLowerCase());
+      if (same) pid = same.id;
+      else {
+        const p = {id:uid(), title:c.P.title, categoryId:c.P.categoryId || S.categories[0]?.id || '', sub:c.P.sub, priority:c.P.priority, notes:'', archived:false};
+        if (shared) Object.assign(p, {createdBy:shared.me, prio:{[shared.me]:c.P.priority}});
+        S.projects.push(p); writes.push(['projects/' + p.id, p]); pid = p.id;
+      }
+      made.set(c.P.key, pid);
+    }
+    const it = {id:uid(), projectId:pid, title:c.title.trim(), ball:c.ball, waitingOn:c.ball ? '' : c.waitingOn, followUp:'', urgency:c.urgency, due:c.due, ease:c.ease, notes:'', done:false, doneAt:'', created:new Date().toISOString()};
+    if (shared) Object.assign(it, {owner:shared.me, createdBy:shared.me, handedBy:''});
+    S.items.push(it); writes.push(['items/' + it.id, it]);
+  });
+  S.isExample = false;
+  if (shared) {
+    dump.busy = true;
+    try { let k = 0; for (const [path, d] of writes) { toast(`Saving ${++k} of ${writes.length}…`); await shared.db.doc(path).set(strip(d)); } }
+    catch (err) { dbErr(err); dump.busy = false; return; }
+  }
+  dump.urls.forEach(u => URL.revokeObjectURL(u)); dump = freshDump();
+  S.ui.view = 'now'; S.ui.mode = 'all'; render();
+  toast(`Added ${keep.length} step${keep.length === 1 ? '' : 's'}. Here’s your ranked list.`);
+}
+
+/* ---------- hand off + calendar reminders ---------- */
+function calLinks(title, who, date, projTitle) {
+  if (!date) return '<span class="help">Pick a follow-up date to add a calendar reminder.</span>';
+  const next = isoDay(new Date(new Date(date + 'T00:00').getTime() + 864e5));
+  const text = `Follow up: ${who ? who + ' – ' : ''}${title || 'Backtoit step'}`;
+  const details = `${projTitle ? 'Project: ' + projTitle + '. ' : ''}${who ? 'Waiting on ' + who + '. ' : ''}From Backtoit.`;
+  const g = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(text)}&dates=${date.replace(/-/g, '')}/${next.replace(/-/g, '')}&details=${encodeURIComponent(details)}`;
+  const o = `https://outlook.office.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose&rru=addevent&subject=${encodeURIComponent(text)}&startdt=${date}&enddt=${next}&allday=true&body=${encodeURIComponent(details)}`;
+  const ics = window.claude ? '' : `<button type="button" class="btn small" data-act="ics" data-date="${date}" data-text="${esc(text)}" data-details="${esc(details)}">Apple / other</button>`;
+  return `<span class="help">Add a reminder to my calendar:</span><a class="btn small" href="${g}" target="_blank" rel="noopener">Google</a><a class="btn small" href="${o}" target="_blank" rel="noopener">Outlook</a>${ics}`;
+}
+function firstName(who) {
+  const m = String(who || '').trim().match(/^([A-Z][A-Za-z'’-]+)\b/);
+  return m && !/^(The|Journal|Dept|Department|Office|Grants?|Committee|Editor|Editors|Reviewers?|Vendor|Students?|Chair|Dean|Advisor|Coauthors?|Collaborators?|Team|Staff|Lab|Funder|Program|Sponsor|IT|HR|Admin)$/i.test(m[1]) ? m[1] : '';
+}
+const longDate = iso => new Date(iso + 'T00:00').toLocaleDateString(undefined, {weekday:'long', month:'long', day:'numeric'});
+function draftEmail(kind, it, who, date) {
+  const p = proj(it.projectId), n = firstName(who);
+  const about = `${it.title}${p ? `, for ${p.title}` : ''}`;
+  const hi = n ? `Hi ${n},` : 'Hi,';
+  const sign = `Thanks${myName ? `,\n${myName}` : ','}`;
+  if (kind === 'nudge') return {subject:`Following up: ${it.title}`,
+    body:`${hi}\n\nJust following up on ${about}. Is there an update, or anything you need from me?\n\n${sign}`};
+  return {subject:it.title,
+    body:`${hi}\n\nA quick note about ${about}. Could you get this to me${date ? ` by ${longDate(date)}` : ''}? Let me know if you need anything from me.\n\n${sign}`};
+}
+const EMAIL_APPS = () => window.claude ? ['gmail','outlook'] : ['gmail','outlook','mail'];
+const APP_LABEL = {gmail:'Gmail', outlook:'Outlook', mail:'Mail app'};
+const APP_LONG = {gmail:'your Gmail', outlook:'your Outlook (work or school account, on the web)', mail:'the Mail app on this computer'};
+function emailApp() { const a = S.ui.emailApp; return EMAIL_APPS().includes(a) ? a : 'gmail'; }
+function composeUrl(app, to, subject, body) {
+  const q = encodeURIComponent;
+  if (app === 'outlook') return `https://outlook.office.com/mail/deeplink/compose?to=${q(to)}&subject=${q(subject)}&body=${q(body)}`;
+  if (app === 'mail') return `mailto:${q(to).replace(/%40/g, '@')}?subject=${q(subject)}&body=${q(body)}`;
+  return `https://mail.google.com/mail/?view=cm&fs=1&to=${q(to)}&su=${q(subject)}&body=${q(body)}`;
+}
+function setLink(a, app, url) { a.href = url; if (app === 'mail') a.removeAttribute('target'); else a.target = '_blank'; }
+function appSeg(el, onPick) {
+  el.innerHTML = segHTML(el.id, EMAIL_APPS(), APP_LABEL, emailApp());
+  el.onchange = () => { S.ui.emailApp = segVal(el.id); save(); onPick(); };
+}
+let nuId = null;
+function openNudge(id) {
+  const it = S.items.find(i => i.id === id); if (!it) return;
+  nuId = id;
+  const who = it.waitingOn || '', p = proj(it.projectId);
+  $('nu-h').textContent = firstName(who) ? `Nudge ${firstName(who)}` : 'Send a nudge';
+  $('nu-step').innerHTML = `<b>${esc(it.title)}</b>${p ? ' · ' + esc(p.title) : ''}${who ? ` · waiting on ${esc(who)}` : ''}`;
+  const d = draftEmail('nudge', it, who, it.followUp);
+  $('nu-email').value = it.waitingEmail || ''; $('nu-body').value = d.body;
+  const sync = () => {
+    const app = emailApp();
+    setLink($('nu-go'), app, composeUrl(app, $('nu-email').value.trim(), d.subject, $('nu-body').value));
+    $('nu-go').textContent = `Write the email in ${APP_LABEL[app]}`;
+    $('nu-help').textContent = `Opens a new email in ${APP_LONG[app]}, filled in and ready. Nothing is sent until you click Send. We’ll remind you again in a week.`;
+  };
+  appSeg($('nu-app'), sync);
+  $('nu-email').oninput = sync; $('nu-body').oninput = sync; sync();
+  $('nuDlg').showModal();
+}
+function closeNudge(nextWeek) {
+  const it = S.items.find(i => i.id === nuId);
+  if (it) { it.waitingEmail = $('nu-email').value.trim(); if (nextWeek) it.followUp = addDays(7); putItem(it); }
+  $('nuDlg').close(); render();
+  return it;
+}
+$('nuForm').addEventListener('submit', e => { e.preventDefault(); closeNudge(false); });
+$('nu-cancel').onclick = () => closeNudge(false);
+$('nu-go').addEventListener('click', () => { const it = closeNudge(true); if (it) toast(`Your email is ready in ${APP_LABEL[emailApp()]}; click Send there. Next reminder: ${fmtDate(it.followUp)}.`); });
+$('nu-later').onclick = () => { const it = closeNudge(true); if (it) toast(`Next follow-up: ${fmtDate(it.followUp)}. It’s on your Waiting shelf until then.`); };
+let hoId = null;
+function openHandoff(id) {
+  const it = S.items.find(i => i.id === id); if (!it) return;
+  hoId = id;
+  const p = proj(it.projectId), mates = teammates();
+  $('ho-step').innerHTML = `<b>${esc(it.title)}</b>${p ? ' · ' + esc(p.title) : ''}`;
+  $('ho-mate').innerHTML = mates.map(m => `<option value="${m}">${esc(nameOf(m))}</option>`).join('');
+  const c1 = $('ho-c1'); c1.querySelector('input').disabled = !mates.length; c1.setAttribute('aria-disabled', String(!mates.length));
+  $('ho-nomates').hidden = !!mates.length;
+  $('ho-nomates').textContent = shared ? 'No colleagues here yet. Share this page with a colleague; they’ll show up here once they open it.'
+    : 'Handing off to colleagues comes with Backtoit accounts. For now, it works in the shared online version.';
+  document.querySelector(`input[name="ho-to"][value="${mates.length ? 'mate' : 'other'}"]`).checked = true;
+  $('ho-who').value = it.waitingOn || ''; $('ho-date').value = it.followUp || addDays(7); $('ho-email').value = it.waitingEmail || '';
+  const sync = () => {
+    const v = segVal('ho-to');
+    $('ho-matebox').hidden = v !== 'mate'; $('ho-otherbox').hidden = v !== 'other';
+    $('ho-cal').innerHTML = calLinks(it.title, $('ho-who').value.trim(), $('ho-date').value, p?.title);
+    const mail = v === 'other' && $('ho-sendmail').checked, app = emailApp();
+    $('ho-mailbox').hidden = !mail; $('ho-go').hidden = mail; $('ho-go-mail').hidden = !mail;
+    const d = draftEmail('ask', it, $('ho-who').value.trim(), $('ho-date').value);
+    setLink($('ho-go-mail'), app, composeUrl(app, $('ho-email').value.trim(), d.subject, d.body));
+    $('ho-go-mail').textContent = `Hand off and write email in ${APP_LABEL[app]}`;
+    $('ho-mailhelp').textContent = `Opens a new email in ${APP_LONG[app]}, filled in and ready. Nothing is sent until you click Send.`;
+  };
+  $('ho-sendmail').checked = !!it.waitingEmail;
+  appSeg($('ho-app'), sync);
+  $('hoForm').onchange = sync; $('ho-who').oninput = sync; $('ho-date').oninput = sync; $('ho-email').oninput = sync; sync();
+  $('hoDlg').showModal();
+  (mates.length ? $('ho-mate') : $('ho-who')).focus();
+}
+function doHandoff(withEmail) {
+  const it = S.items.find(i => i.id === hoId); if (!it) return;
+  if (segVal('ho-to') === 'mate' && shared) {
+    const to = $('ho-mate').value;
+    Object.assign(it, {owner:to, handedBy:shared.me, ball:true, waitingOn:'', followUp:''});
+    putItem(it); $('hoDlg').close(); render();
+    toast(`Handed off to ${nameOf(to)}. It’s on your Waiting shelf.`);
+  } else {
+    const who = $('ho-who').value.trim(), date = $('ho-date').value;
+    Object.assign(it, {ball:false, waitingOn:who, followUp:date, waitingEmail:$('ho-email').value.trim()});
+    if (shared) it.owner = shared.me;
+    putItem(it); $('hoDlg').close(); render();
+    toast(withEmail ? `Handed off. Your email is ready in ${APP_LABEL[emailApp()]}; click Send there.`
+      : `Waiting on ${who || 'someone'}.${date ? ` It comes back to Now on ${fmtDate(date)}.` : ' It’s on your Waiting shelf.'}`);
+  }
+}
+$('hoForm').addEventListener('submit', e => { e.preventDefault(); doHandoff(false); });
+$('ho-go-mail').addEventListener('click', () => doHandoff(true));
+$('ho-cancel').onclick = () => $('hoDlg').close();
+
+/* ---------- roles ---------- */
+function applyRole(role, replace) {
+  if (replace) S.categories = catsFor(role);
+  else ROLES[role].cats.forEach(([name, subs]) => { const c = ensureCat(name); subs.forEach(s => { if (!c.subs.includes(s)) c.subs.push(s); }); });
+  putCats();
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-act], nav.tabs button'); if (!b) return;
+  if (b.dataset.view) { S.ui.view = b.dataset.view; render(); return; }
+  const id = b.dataset.id, it = id && S.items.find(i => i.id === id);
+  switch (b.dataset.act) {
+    case 'mode': S.ui.mode = b.dataset.m; render(); break;
+    case 'goto': S.ui.view = b.dataset.v; render(); break;
+    case 'home': e.preventDefault(); S.ui.view = 'now'; render(); window.scrollTo(0, 0); break;
+    case 'ics': {
+      const day = x => x.replace(/-/g, ''), next = isoDay(new Date(new Date(b.dataset.date + 'T00:00').getTime() + 864e5));
+      const icsEsc = t => t.replace(/[\\,;]/g, m => '\\' + m);
+      const body = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Backtoit//EN', 'BEGIN:VEVENT', `UID:${uid()}@backtoit.app`,
+        `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').slice(0, 15)}Z`, `DTSTART;VALUE=DATE:${day(b.dataset.date)}`, `DTEND;VALUE=DATE:${day(next)}`,
+        `SUMMARY:${icsEsc(b.dataset.text)}`, `DESCRIPTION:${icsEsc(b.dataset.details)}`, 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+      saveFile('Backtoit-follow-up.ics', new Blob([body], {type:'text/calendar'})); break; }
+    case 'bd-go': runDump(); break;
+    case 'bd-stop': dump.ctl?.abort(); break;
+    case 'bd-rmimg': { const k = +b.dataset.k; URL.revokeObjectURL(dump.urls[k]); dump.images.splice(k, 1); dump.urls.splice(k, 1); render(); break; }
+    case 'bd-rmfile': dump.files.splice(+b.dataset.k, 1); render(); break;
+    case 'bd-reset': dump.urls.forEach(u => URL.revokeObjectURL(u)); dump = freshDump(); render(); break;
+    case 'bd-commit': commitCards(); break;
+    case 'tri': { const c = dump.cards[dump.i], f = b.dataset.f, v = b.dataset.v;
+      if (f === 'ball') c.ball = v === 'me'; else if (f === 'priority') c.P.priority = v; else c[f] = v; render(); break; }
+    case 'tri-keep': dump.cards[dump.i].keep = true; dump.i++; render(); break;
+    case 'tri-skip': dump.cards[dump.i].keep = false; dump.i++; render(); break;
+    case 'tri-back': if (dump.i > 0) dump.i--; render(); break;
+    case 'tri-all': for (let j = dump.i; j < dump.cards.length; j++) if (dump.cards[j].keep === null) dump.cards[j].keep = true; dump.i = dump.cards.length; render(); break;
+    case 'import': S.ui.view = 'setup'; render(); document.getElementById('imp-file')?.click(); break;
+    case 'done': it.done = true; it.doneAt = new Date().toISOString(); if (shared) it.doneBy = shared.me; putItem(it); render();
+      toast(`Done: ${it.title}`, () => { it.done = false; it.doneAt = ''; if (shared) it.doneBy = ''; putItem(it); render(); }); break;
+    case 'undone': it.done = false; it.doneAt = ''; if (shared) it.doneBy = ''; putItem(it); render(); toast('Moved back to your list'); break;
+    case 'wait': openHandoff(id); break;
+    case 'nudge': openNudge(id); break;
+    case 'back': it.ball = true; it.followUp = ''; if (shared) it.owner = shared.me; putItem(it); render(); toast('Back in your court'); break;
+    case 'reclaim': it.owner = shared.me; it.handedBy = ''; it.ball = true; putItem(it); render(); toast('Back in your court'); break;
+    case 'edit': openStep(id); break;
+    case 'new': openStep(null); break;
+    case 'newstep': openStep(null, {projectId:id}); break;
+    case 'newproj': openProj(null); break;
+    case 'editproj': openProj(id); break;
+    case 'unarchive': { const p = proj(id); p.archived = false; putProj(p); render(); toast('Project restored'); break; }
+    case 'addcat': S.categories.push({id:uid(), name:'New category', subs:[]}); putCats(); render(); break;
+    case 'delcat': S.categories = S.categories.filter(c => c.id !== id); putCats(); render(); break;
+    case 'addrole': applyRole(b.dataset.role, false); render(); toast(`${ROLES[b.dataset.role].label} categories added`); break;
+    case 'role':
+      if (shared) { applyRole(b.dataset.role, true); shared.hasCats = true; }
+      else { const ui = S.ui; local = S = blankState(b.dataset.role); S.ui = ui; }
+      S.ui.view = 'dump'; render(); toast('You’re set up. Now tell us everything on your plate.'); break;
+    case 'backup': saveFile(`Backtoit-backup-${todayISO()}.json`, JSON.stringify(Object.assign({}, S, {ui:undefined}), null, 1)); break;
+    case 'export-xlsx': exportXlsx(); break;
+    case 'example': { const ui = S.ui; local = S = exampleState(); S.ui = ui; S.ui.view = 'now'; render(); break; }
+    case 'fresh': S.ui.view = 'welcome'; render(); break;
+    case 'wipe': if (!confirmClick(b)) return; { const ui = S.ui; local = S = blankState(); S.ui = ui; S.ui.view = 'now'; render(); toast('Everything cleared'); } break;
+  }
+});
+
+/* ---------- shared mode (when opened as a shared page) ---------- */
+async function refreshNames() {
+  const ids = [...new Set([...shared.members, ...S.items.flatMap(i => [i.owner, i.handedBy, i.doneBy, i.createdBy])].filter(Boolean))];
+  if (!ids.length) return;
+  const ps = await shared.user.profiles(ids);
+  let changed = false;
+  ids.forEach(id => { const n = ps[id]?.name || ''; if (shared.names[id] !== n) { shared.names[id] = n; shared.colors[id] = ps[id]?.color; changed = true; } });
+  if (changed) softRender();
+}
+async function initShared() {
+  if (!window.claude || typeof window.claude.use !== 'function') return;
+  downloads = await window.claude.use('downloads').catch(() => null);
+  sampleFn = await window.claude.use('sample').catch(() => null);
+  if (sampleFn) imgCaps = (await sampleFn.limits().catch(() => null))?.images || null;
+  const [db, user] = await Promise.all([window.claude.use('db'), window.claude.use('user')]).catch(() => [null, null]);
+  if (!db || !user) { render(); return; }
+  const myId = await user.id(); if (!myId) { render(); return; }
+  myName = String((await user.name()) || '').split(' ')[0];
+  shared = {db, user, me:myId, names:{}, colors:{}, members:[myId], loaded:{cats:false, items:false, projects:false}, hasCats:false};
+  S = {ui:local.ui, isExample:false, categories:[], projects:[], items:[]};
+  const onErr = err => { if (err && err.code === 'revoked') toast('This shared list is no longer available to you.'); };
+  const rows = snap => snap.docs.map(d => Object.assign(clean(d.data()), {id:d.id}));
+  db.collection('projects').onSnapshot(s => { S.projects = rows(s); shared.loaded.projects = true; softRender(); }, onErr);
+  db.collection('items').onSnapshot(s => { S.items = rows(s); shared.loaded.items = true; softRender(); }, onErr);
+  db.doc('settings/categories').onSnapshot(d => { shared.loaded.cats = true; shared.hasCats = d.exists; S.categories = d.exists ? clean(d.data().list || []) : []; softRender(); }, onErr);
+  db.collection('members').onSnapshot(s => { const ids = s.docs.map(d => d.id); shared.members = ids.includes(myId) ? ids : [myId, ...ids]; softRender(); }, onErr);
+  db.doc('members/' + myId).get().then(d => { if (!d.exists) return db.doc('members/' + myId).set({joined:new Date().toISOString()}); }).catch(() => {});
+  render();
+}
+
+render();
+initShared();
+})();
+</script>

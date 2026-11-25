@@ -1,0 +1,11 @@
+# Personal triage spreadsheets and exports name real people: never commit them
+*.xlsx
+*.xls
+*.csv
+private/
+_qa/
+.DS_Store
+~$*
+.env
+*.key
+*.pem
